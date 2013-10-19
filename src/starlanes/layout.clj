@@ -61,9 +61,6 @@
   "'row-data' contains a list of keys (keywords) and values. To get the string
   content for the row, the values need to be extracted.
   "
-  ;(let [item-data (vals row-data)]
-  ;  (string/join grid-space item-data)))
-                 ;(colorize-item item-data))))
   (string/join
     grid-space
     (map
