@@ -1,8 +1,8 @@
-############
-Star Traders
-############
+##################
+Clojure Star-Lanes
+##################
 
-*Nostalgic Implementations*
+*A Nostalgic Implementation*
 
 .. image:: resources/screeshots/hy-early-stage-game-400.png
 
@@ -15,7 +15,8 @@ Background
 however.
 
 Over the years, it was copied and then heavily modified, morphing into what
-became *Star Lanes* by the late 70s and early 80s. (Note that some *Star Lanes* versions of the game still used the ``TRADE.BAS`` filename, while others
+became *Star Lanes* by the late 70s and early 80s. (Note that some *Star Lanes* 
+versions of the game still used the ``TRADE.BAS`` filename, while others
 switched to ``LANES.BAS``.)
 
 The *Star Trader* lineage of games inspired a list of excellent games; the
@@ -43,20 +44,10 @@ Star Lanes
 In *Star Lanes*, players take turns building outposts, creating companies, and
 purchasing stock.
 
-Implementations
-===============
+Clojure Implementation
+======================
 
-For now, the implementations below are focusing on the *Star Lanes* version of
-the game. Each implementation has its own README:
-
-* `Hy`_ (Python Lisp)
-
-* `LFE`_ (Lisp Flavored Erlang)
-
-* `Clojure`_
-
-* `Racket`_
-
+TBD
 
 .. Links
 .. -----
