@@ -28,6 +28,12 @@
     (for [index (range player-count)]
       (create-new-player index))))
 
+(defn get-players-names
+  [game-data]
+  (map
+    (fn [x] (x :name))
+    (game-data :players)))
+
 (defn set-player-order [game-data]
   (let [player-count (util/get-player-count game-data)
         indices (range player-count)]
