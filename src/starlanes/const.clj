@@ -71,5 +71,20 @@
 (def continue-prompt "Press <RETURN> to continue ...")
 (def confirm-prompt "Are you sure? [N/y] ")
 
-
-
+;; terminal color components
+(def open-color "\33[")
+(def close-color "m")
+(def start-color "\33[")
+(def end-color "\33[m")
+(def color-info {:dark "0"
+                 :light "1"
+                 :foreground "3"
+                 :background "4"
+                 :black "0"
+                 :red "1"
+                 :green "2"
+                 :yellow "3"
+                 :blue "4"
+                 :magenta "5"
+                 :cyan "6"
+                 :white "7"})

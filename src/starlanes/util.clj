@@ -206,3 +206,34 @@
     (get-map-of-maps map-keys {}))
   ([map-keys second-map]
     (into {} (map (fn [x] [(keyword x) second-map]) map-keys))))
+
+(defn get-color-tuple
+  ""
+  [foreground-color background-color type]
+  (str
+    (const/color-info type)
+    ";"
+    (const/color-info :foreground)
+    (const/color-info foreground-color)
+    ";"
+    (const/color-info :background)
+    (const/color-info background-color)))
+
+(defn start-color
+  ""
+  [foreground-color background-color type]
+  (str
+    const/open-color
+    (get-color-tuple foreground-color background-color type)
+    const/close-color))
+
+(defn colorize
+  ""
+  ([text]
+   (colorize text :white))
+  ([text foreground & {:keys [background type]
+                       :or {background :black type :dark}}]
+    (str
+      (start-color foreground background type)
+      text
+      const/end-color)))
