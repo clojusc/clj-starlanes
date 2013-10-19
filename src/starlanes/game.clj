@@ -1,4 +1,4 @@
-(ns starlanes.game.base
+(ns starlanes.game
   (:require [clojure.string :as string]
             [starlanes.const :as const]
             [starlanes.finance :as finance]
