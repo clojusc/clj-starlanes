@@ -5,6 +5,7 @@ Clojure Star-Lanes
 *A Nostalgic Implementation*
 
 .. image:: resources/screeshots/hy-early-stage-game-400.png
+.. contents:: Table of Contents
 
 
 Background
