@@ -7,8 +7,7 @@
 
 (defn create-item [rand-float]
   (cond
-    (<= rand-float const/star-rate)
-    (const/items :star)
+    (<= rand-float const/star-rate) (const/items :star)
     :else (const/items :empty)))
 
 (defn create-game-item [game-data]
@@ -148,31 +147,23 @@
     (get-neighbors-pairs keyword-coord)))
 
 (defn get-item-neighbors [keyword-coord game-data]
-  (map (fn [x] [x (get-item x game-data)]) (get-neighbors keyword-coord)))
-
-(defn company? [item]
-  (cond
-    (util/in? (util/get-companies-letters) item) true
-    :else false))
-
-(defn star? [item]
-  (cond
-    (= item (const/items :star)) true
-    :else false))
-
-(defn outpost? [item]
-  (cond
-    (= item (const/items :outpost)) true
-    :else false))
+  (map (fn [x] [x (get-item x game-data)])
+       (get-neighbors keyword-coord)))
 
 (defn get-neighbor-companies [keyword-coord game-data]
-  (filter (comp company? second) (get-item-neighbors keyword-coord game-data)))
+  (filter
+    (comp util/company? second)
+    (get-item-neighbors keyword-coord game-data)))
 
 (defn get-neighbor-stars [keyword-coord game-data]
-  (filter (comp star? second) (get-item-neighbors keyword-coord game-data)))
+  (filter
+    (comp util/star? second)
+    (get-item-neighbors keyword-coord game-data)))
 
 (defn get-neighbor-outposts [keyword-coord game-data]
-  (filter (comp outpost? second) (get-item-neighbors keyword-coord game-data)))
+  (filter
+    (comp util/outpost? second)
+    (get-item-neighbors keyword-coord game-data)))
 
 (defn near-item? [keyword-coord coords-for-items]
   (let [items-neighbors (flatten (map get-neighbors coords-for-items))]

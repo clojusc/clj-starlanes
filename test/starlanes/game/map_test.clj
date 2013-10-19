@@ -73,18 +73,6 @@
   (is (= '([:a1 "*"] [:a3 "B"] [:b1 "."] [:b2 "."] [:b3 "B"])
          (game/get-item-neighbors :a2 util/fake-game-data))))
 
-(deftest test-company?
-  (is (= true (game/company? "A")))
-  (is (= false (game/company? "+"))))
-
-(deftest test-star?
-  (is (= true (game/star? "*")))
-  (is (= false (game/star? "+"))))
-
-(deftest test-outpost?
-  (is (= true (game/outpost? "+")))
-  (is (= false (game/outpost? "A"))))
-
 (deftest test-get-neighbor-companies
   (is (= [[:a3 "B"] [:a5 "C"] [:b3 "B"]]
          (game/get-neighbor-companies :b4 util/fake-game-data))))

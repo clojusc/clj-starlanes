@@ -3,7 +3,14 @@
 
 (def game-title "Star Traders")
 
-(def items {:star "*" :empty "." :outpost "+"})
+(def items {:star "*"
+            :empty "."
+            :outpost "+"})
+
+(def item-colors {:star :yellow
+                  :empty :dark-grey
+                  :outpost :light-green
+                  :company :light-cyan})
 
 (def outpost-char "+")
 (def grid-spaces 3)
@@ -88,3 +95,24 @@
                  :magenta "5"
                  :cyan "6"
                  :white "7"})
+
+(def color-map {:black [:black :dark]
+                :white [:white :light]
+                :dark-grey [:black :light]
+                :light-grey [:white :dark]
+                :red [:red :dark]
+                :dark-red [:red :dark]
+                :green [:green :dark]
+                :dark-green [:green :dark]
+                :yellow [:yellow :dark]
+                :dark-yellow [:yellow :dark]
+                :blue [:blue :dark]
+                :dark-blue [:blue :dark]
+                :magenta [:magenta :dark]
+                :cyan [:cyan :dark]
+                :light-red [:red :light]
+                :light-green [:green :light]
+                :light-yellow [:yellow :light]
+                :light-blue [:blue :light]
+                :light-magenta [:magenta :light]
+                :light-cyan [:cyan :light]})

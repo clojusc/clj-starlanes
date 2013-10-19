@@ -143,6 +143,18 @@
   (is (= {3 1, 2 2, 1 3}
          (util/count-occurances [1 1 1 2 2 3]))))
 
+(deftest test-company?
+  (is (= true (util/company? "A")))
+  (is (= false (util/company? "+"))))
+
+(deftest test-star?
+  (is (= true (util/star? "*")))
+  (is (= false (util/star? "+"))))
+
+(deftest test-outpost?
+  (is (= true (util/outpost? "+")))
+  (is (= false (util/outpost? "A"))))
+
 (deftest test-get-color-tuple
   (is (= "0;32;40" (util/get-color-tuple :green :black :dark)))
   const/end-color
@@ -160,9 +172,9 @@
   const/end-color)
 
 (deftest test-colorize
-  (is (= "\33[0;37;40mSpace!\33[m" (util/colorize "Space!")))
+  (is (= "\33[1;37;40mSpace!\33[m" (util/colorize "Space!")))
   (is (= "\33[0;30;40mSpace!\33[m" (util/colorize "Space!" :black)))
-  (is (= "\33[0;37;40mSpace!\33[m"
+  (is (= "\33[1;37;40mSpace!\33[m"
          (util/colorize "Space!" :white :background :black)))
   (is (= "\33[1;37;40mSpace!\33[m"
          (util/colorize "Space!" :white :background :black :type :light))))

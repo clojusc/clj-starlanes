@@ -1,5 +1,6 @@
 (ns starlanes.layout
-  (:require [clojure.string :as string]
+  (:require [clojure.set :as set]
+            [clojure.string :as string]
             [starlanes.const :as const]
             [starlanes.util :as util]))
 
@@ -47,12 +48,27 @@
                      const/horiz-divider-term
                      \newline)))
 
+(defn get-item-name [item]
+  (cond
+    (util/company? item) :company
+    :else ((set/map-invert const/items) item)))
+
+(defn colorize-item [item]
+  (let [color (const/item-colors (get-item-name item))]
+    (util/colorize item color)))
+
 (defn get-row-string [row-data]
   "'row-data' contains a list of keys (keywords) and values. To get the string
   content for the row, the values need to be extracted.
   "
-  (let [item-data (vals row-data)]
-    (string/join grid-space item-data)))
+  ;(let [item-data (vals row-data)]
+  ;  (string/join grid-space item-data)))
+                 ;(colorize-item item-data))))
+  (string/join
+    grid-space
+    (map
+      (comp colorize-item second)
+      row-data)))
 
 (defn get-row [row-key grouped-star-map]
   (let [row-data (sort (get grouped-star-map row-key))]

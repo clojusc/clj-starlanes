@@ -207,6 +207,21 @@
   ([map-keys second-map]
     (into {} (map (fn [x] [(keyword x) second-map]) map-keys))))
 
+(defn company? [item]
+  (cond
+    (in? (get-companies-letters) item) true
+    :else false))
+
+(defn star? [item]
+  (cond
+    (= item (const/items :star)) true
+    :else false))
+
+(defn outpost? [item]
+  (cond
+    (= item (const/items :outpost)) true
+    :else false))
+
 (defn get-color-tuple
   ""
   [foreground-color background-color type]
@@ -231,9 +246,9 @@
   ""
   ([text]
    (colorize text :white))
-  ([text foreground & {:keys [background type]
-                       :or {background :black type :dark}}]
-    (str
-      (start-color foreground background type)
-      text
-      const/end-color)))
+  ([text foreground & {:keys [background] :or {background :black}}]
+   (let [[foreground-color type] (const/color-map foreground)]
+     (str
+       (start-color foreground-color background type)
+       text
+       const/end-color))))

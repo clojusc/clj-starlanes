@@ -20,20 +20,41 @@
         expected 4]
     (is (= result expected))))
 
+(deftest test-check-item
+  (is (= :star (layout/get-item-name "*")))
+  (is (= :empty (layout/get-item-name ".")))
+  (is (= :outpost (layout/get-item-name "+")))
+  (is (= :company (layout/get-item-name "A")))
+  (is (= :company (layout/get-item-name "E"))))
+
+(deftest test-colorize-item
+  (is (= "\33[0;33;40m*\33[m" (layout/colorize-item "*")))
+  (is (= "\33[1;30;40m.\33[m" (layout/colorize-item ".")))
+  (is (= "\33[1;32;40m+\33[m" (layout/colorize-item "+")))
+  (is (= "\33[1;36;40mA\33[m" (layout/colorize-item "A")))
+  (is (= "\33[1;36;40mE\33[m" (layout/colorize-item "E"))))
+
 (deftest test-get-row-string
   (let [game-data (game/create-star-map-for-game (game/game-data-factory))
         grouped-data (group-by layout/grouper (game-data :star-map))
         row-data (sort (get grouped-data "3"))
-        result (layout/get-row-string row-data)
-        expected ".   .   *   .   ."]
-    (is (= result expected))))
+        result (layout/get-row-string row-data)]
+    (is (= row-data [[:a3 "."] [:b3 "."] [:c3 "*"] [:d3 "."] [:e3 "."]]))
+    (is (= result (str "\33[1;30;40m.\33[m "
+                       "  \33[1;30;40m.\33[m "
+                       "  \33[0;33;40m*\33[m "
+                       "  \33[1;30;40m.\33[m "
+                       "  \33[1;30;40m.\33[m")))))
 
 (deftest test-get-row
   (let [game-data (game/create-star-map-for-game (game/game-data-factory))
         grouped-data (group-by layout/grouper (game-data :star-map))
-        result (layout/get-row "1" grouped-data)
-        expected ".   .   .   .   ."]
-    (is (= result expected))))
+        result (layout/get-row "1" grouped-data)]
+    (is (= result (str "\33[1;30;40m.\33[m "
+                       "  \33[1;30;40m.\33[m "
+                       "  \33[1;30;40m.\33[m "
+                       "  \33[1;30;40m.\33[m "
+                       "  \33[1;30;40m.\33[m")))))
 
 (deftest test-grouper
   (let [game-data (game/create-star-map-for-game (game/game-data-factory))
