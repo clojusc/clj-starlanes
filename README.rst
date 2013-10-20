@@ -26,7 +26,7 @@ The *Star Trader* lineage of games inspired a list of excellent games; the
 *Star Trader*. There is also a page that provides a `timeline`_ of
 *Star Trader*, should you want to explore this further.
 
-The differences of the original two variantes of the game are briefly
+The differences of the original two varieties of the game are briefly
 outlined below.
 
 
