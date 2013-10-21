@@ -4,6 +4,17 @@
             [starlanes.const :as const]))
 
 
+(def fake-finance-data
+  {:A
+    {"Alice" {:shares 1000}
+     "Bob" {:shares 500}
+     "Carol" {:shares 100}}
+   :B
+    {"Carol" {:shares 1000}}
+   :C
+    {"Bob" {:shares 500}
+     "Carol" {:shares 100}}})
+
 (def fake-game-data
   {:star-map
     {:a1 "*", :a2 ".", :a3 "B", :a4 ".", :a5 "C",
@@ -18,21 +29,10 @@
     {:stock nil, :name "Carol", :cash 0.0}],
    :player-order [1 0],
    :move 0,
-   :companies-queue ["Al" "Be" "Ca" "De" "Er"],
    :companies [],
-   :share-value {},
+   :companies-queue ["Al" "Be" "Ca" "De" "Er"],
+   :stock-exchange fake-finance-data,
    :rand nil})
-
-(def fake-finance-data
-  {:A
-    {:Alice {:shares 1000}
-     :Bob {:shares 500}
-     :Carol {:shares 100}}
-   :B
-    {:Carol {:shares 1000}}
-   :C
-    {:Bob {:shares 500}
-     :Carol {:shares 100}}})
 
 (defn display [data]
   (.print (System/out) data))
@@ -194,6 +194,9 @@
     (comp str first)
     (get-companies)))
 
+(defn get-companies-keys []
+  (map keyword (get-companies-letters)))
+
 (defn count-occurances [data]
   (reduce
     #(assoc %1 %2 (inc (%1 %2 0)))
@@ -205,7 +208,7 @@
   ([map-keys]
     (get-map-of-maps map-keys {}))
   ([map-keys second-map]
-    (into {} (map (fn [x] [(keyword x) second-map]) map-keys))))
+    (into {} (map (fn [x] [x second-map]) map-keys))))
 
 (defn company? [item]
   (cond
