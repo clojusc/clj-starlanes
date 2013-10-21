@@ -7,9 +7,7 @@
 
 (deftest test-player-data-factory
   (let [player (player/player-data-factory)]
-    (is (= (player :name) ""))
-    (is (= (player :cash) 0.0))
-    (is (= (player :stocks) nil))))
+    (is (= (player :name) ""))))
 
 (deftest test-get-players-names
   (is (= ["Alice" "Bob" "Carol"]
