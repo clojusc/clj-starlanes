@@ -7,4 +7,11 @@
                  [org.clojure/math.combinatorics "0.0.4"]]
   :plugins [[lein-exec "0.3.1"]]
   :aot [starlanes.trader]
-  :main starlanes.trader)
+  :main starlanes.trader
+  :profiles {
+    :dev {
+      :dependencies [[org.clojure/tools.namespace "0.2.3"]
+                 [org.clojure/java.classpath "0.2.0"]]}
+    :testing {
+      :dependencies [[clj-http-fake "0.4.1"]
+                     [leiningen "2.3.3"]]}})
