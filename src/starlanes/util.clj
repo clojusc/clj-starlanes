@@ -24,9 +24,9 @@
      :e1 "A", :e2 "A", :e3 ".", :e4 "*", :e5 "."},
    :total-moves 0,
    :players [
-    {:stock nil, :name "Alice", :cash 0.0},
-    {:stock nil, :name "Bob", :cash 0.0},
-    {:stock nil, :name "Carol", :cash 0.0}],
+    {:name "Alice"},
+    {:name "Bob"},
+    {:name "Carol"}],
    :player-order [1 0],
    :move 0,
    :companies [],

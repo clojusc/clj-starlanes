@@ -5,9 +5,7 @@
 (defn player-data-factory []
   "Elements of stock will be maps, each having an entry for the company name
   and the number of shares held for that company."
-  {:name ""
-   :cash 0.0
-   :stock []})
+  {:name ""})
 
 (defn create-new-player [index]
   (let [prompt (str "Player " (str (inc index)) ", what is your name? ")
