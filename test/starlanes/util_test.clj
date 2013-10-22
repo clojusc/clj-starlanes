@@ -179,4 +179,3 @@
   (is (= "\33[1;37;40mSpace!\33[m"
          (util/colorize "Space!" :white :background :black :type :light))))
 
-
