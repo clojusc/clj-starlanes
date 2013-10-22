@@ -5,47 +5,80 @@
 
 
 (deftest test-get-new-exchange
-  (is (= [:A] (sort (keys (finance/get-new-exchange ["A"])))))
-  (is (= [:A :B] (sort (keys (finance/get-new-exchange ["A" "B"])))))
-  (is (= [:A :B :C] (sort (keys (finance/get-new-exchange ["A" "B" "C"])))))
-  (is (= [:Alice :Bob]
-         (sort (keys ((finance/get-new-exchange ["A"] ["Alice" "Bob"]) :A)))))
-  (is (= [:Alice :Bob :Carol]
+  (is (= [:A]
+         (sort
+           (keys
+             (finance/get-new-stock-exchange ["A"])))))
+  (is (= [:A :B]
+         (sort
+           (keys
+             (finance/get-new-stock-exchange ["A" "B"])))))
+  (is (= [:A :B :C]
+         (sort
+           (keys
+             (finance/get-new-stock-exchange ["A" "B" "C"])))))
+  (is (= ["Alice" "Bob"]
+         (sort
+           (keys
+             ((finance/get-new-stock-exchange ["A"] ["Alice" "Bob"]) :A)))))
+  (is (= ["Alice" "Bob" "Carol"]
          (sort
           (keys
-            ((finance/get-new-exchange
+            ((finance/get-new-stock-exchange
               ["A" "B"]
               ["Alice" "Bob" "Carol"]) :B)))))
-  (is (= [:Alice :Bob :Carol :Dave]
+  (is (= ["Alice" "Bob" "Carol" "Dave"]
          (sort
           (keys
-            ((finance/get-new-exchange
+            ((finance/get-new-stock-exchange
               ["A" "B" "C"]
               ["Alice" "Bob" "Carol" "Dave"]) :C))))))
 
+(deftest test-get-stock-exchange
+  (is (= [:A :B :C]
+         (sort
+           (keys
+             (finance/get-stock-exchange util/fake-game-data))))))
+
 (deftest test-get-company-holdings
-  (is (= [:Alice :Bob :Carol]
+  (is (= ["Alice" "Bob" "Carol"]
          (sort
            (keys
-             (finance/get-company-holdings "A" util/fake-finance-data)))))
-  (is (= [:Carol]
+             (finance/get-company-holdings "A" util/fake-game-data)))))
+  (is (= ["Carol"]
          (sort
            (keys
-             (finance/get-company-holdings "B" util/fake-finance-data)))))
-  (is (= [:Bob :Carol]
+             (finance/get-company-holdings "B" util/fake-game-data)))))
+  (is (= ["Bob" "Carol"]
          (sort
            (keys
-             (finance/get-company-holdings "C" util/fake-finance-data))))))
+             (finance/get-company-holdings "C" util/fake-game-data))))))
+
+(deftest test-get-company-shares
+  (is (= 1600 (finance/get-company-shares "A" util/fake-game-data)))
+  (is (= 1000 (finance/get-company-shares "B" util/fake-game-data)))
+  (is (= 600 (finance/get-company-shares "C" util/fake-game-data)))
+  )
 
 (deftest test-get-player-shares
-  (is (= 1000 (finance/get-player-shares "A" "Alice" util/fake-finance-data)))
-  (is (= 500 (finance/get-player-shares "A" "Bob" util/fake-finance-data)))
-  (is (= 100 (finance/get-player-shares "A" "Carol" util/fake-finance-data)))
-  (is (= 0 (finance/get-player-shares "B" "Alice" util/fake-finance-data)))
-  (is (= 1000 (finance/get-player-shares "B" "Carol" util/fake-finance-data)))
-  (is (= 500 (finance/get-player-shares "C" "Bob" util/fake-finance-data)))
-  (is (= 100 (finance/get-player-shares "C" "Carol" util/fake-finance-data)))
-  (is (= 0 (finance/get-player-shares "Z" "Bob" util/fake-finance-data))))
+  (is (= 1000 (finance/get-player-shares "A" "Alice" util/fake-game-data)))
+  (is (= 500 (finance/get-player-shares "A" "Bob" util/fake-game-data)))
+  (is (= 100 (finance/get-player-shares "A" "Carol" util/fake-game-data)))
+  (is (= 0 (finance/get-player-shares "B" "Alice" util/fake-game-data)))
+  (is (= 1000 (finance/get-player-shares "B" "Carol" util/fake-game-data)))
+  (is (= 500 (finance/get-player-shares "C" "Bob" util/fake-game-data)))
+  (is (= 100 (finance/get-player-shares "C" "Carol" util/fake-game-data)))
+  (is (= 0 (finance/get-player-shares "Z" "Bob" util/fake-game-data))))
+
+(deftest test-get-players-shares
+  (is (= {"Alice" {:A 1000, :B 0, :C 0, :D 0, :E 0},
+          "Bob" {:A 500, :B 0, :C 500, :D 0, :E 0},
+          "Carol" {:A 100, :B 1000, :C 100, :D 0, :E 0}}
+         (finance/get-players-shares util/fake-game-data)))
+  (is (= {"Alice" {:A 1000, :B 0, :C 0},
+          "Bob" {:A 500, :B 0, :C 500},
+          "Carol" {:A 100, :B 1000, :C 100}}
+         (finance/get-players-shares ["A" "B" "C"] util/fake-game-data))))
 
 (deftest test-get-new-company
   (let [result (finance/get-new-company)]
@@ -119,8 +152,18 @@
 (deftest test-get-share-value
   (is (= 1800 (finance/get-share-value "A" util/fake-game-data)))
   (is (= 700 (finance/get-share-value "B" util/fake-game-data)))
-  (is (= 100 (finance/get-share-value "C" util/fake-game-data)))
-  )
+  (is (= 100 (finance/get-share-value "C" util/fake-game-data))))
+
+(deftest test-get-company-value
+  (is (= 2880000 (finance/get-company-value "A" util/fake-game-data)))
+  (is (= 700000 (finance/get-company-value "B" util/fake-game-data)))
+  (is (= 60000 (finance/get-company-value "C" util/fake-game-data))))
+
+(deftest test-get-companies-values
+  (is (= {:A 2880000, :B 700000, :C 60000, :D 0, :E 0}
+         (finance/get-companies-values util/fake-game-data)))
+  (is (= {:A 2880000, :B 700000, :C 60000}
+        (finance/get-companies-values ["A" "B" "C"] util/fake-game-data))))
 
 (deftest test-get-filtered-companies
   (is (= [[:a5 "C"] [:d1 "A"] [:e1 "A"] [:e2 "A"]]
@@ -130,4 +173,11 @@
   (is (= [[:a3 "B"] [:b3 "B"]]
          (finance/get-filtered-companies ["B"] util/fake-game-data))))
 
+(deftest test-get-greatest-company
+  (is (= :A (finance/get-greatest-company
+              (util/get-companies-letters)
+              util/fake-game-data)))
+  (is (= :A (finance/get-greatest-company ["A" "C"] util/fake-game-data)))
+  (is (= :B (finance/get-greatest-company ["B" "C"] util/fake-game-data)))
+  (is (= :C (finance/get-greatest-company ["C" "D" "E"] util/fake-game-data))))
 

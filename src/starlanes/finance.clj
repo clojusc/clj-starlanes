@@ -1,32 +1,41 @@
 (ns starlanes.finance
-  (:require [starlanes.const :as const]
+  (:require [clojure.set :as set]
+            [starlanes.const :as const]
             [starlanes.game.map :as game-map]
+            [starlanes.player :as player]
             [starlanes.util :as util]))
 
 
-(defn get-new-exchange
+(defn get-new-stock-exchange
   ([companies-letters]
-    (util/get-map-of-maps companies-letters))
+    (util/get-map-of-maps (map keyword companies-letters)))
   ([companies-letters players-names]
     (let [players-holdings (util/get-map-of-maps players-names)]
-      (util/get-map-of-maps companies-letters players-holdings))))
+      (util/get-map-of-maps (map keyword companies-letters) players-holdings))))
+
+(defn get-stock-exchange [game-data]
+  (game-data :stock-exchange))
 
 (defn get-company-holdings
   ""
-  [company-letter exchange-data]
-  (exchange-data (keyword company-letter)))
+  [company-letter game-data]
+  ((get-stock-exchange game-data) (keyword company-letter)))
 
-(defn get-player-holdings
+(defn get-company-shares
   ""
-  [company-holdings player-name]
-  (company-holdings (keyword player-name)))
+  [company-letter game-data]
+  (reduce +
+          (map
+            (fn [x] (x :shares))
+            (vals
+              (get-company-holdings company-letter game-data)))))
 
 (defn get-player-shares
   ""
-  [company-letter player-name exchange-data]
-  (let [company-holdings (get-company-holdings company-letter exchange-data)]
+  [company-letter player-name game-data]
+  (let [company-holdings (get-company-holdings company-letter game-data)]
     (if company-holdings
-      (let [player-holdings (get-player-holdings company-holdings player-name)]
+      (let [player-holdings (company-holdings player-name)]
         (if player-holdings
           (let [player-shares (player-holdings :shares)]
             (if player-shares
@@ -34,6 +43,23 @@
               0))
           0))
       0)))
+
+(defn get-players-shares
+  ""
+  ([game-data]
+    (get-players-shares (util/get-companies-letters) game-data))
+  ([companies-letters game-data]
+    (into {}
+          (map
+            (fn [player-name]
+              [player-name (into {}
+                       (map
+                         (fn [company-letter]
+                           [(keyword company-letter)
+                            (get-player-shares
+                              company-letter player-name game-data)])
+                         companies-letters))])
+            (player/get-players-names game-data)))))
 
 (defn company-factory []
   {:name ""
@@ -44,7 +70,11 @@
   ([]
     (company-factory))
   ([name units share-mod]
-    (assoc (company-factory) :name name :units units :share-mod share-mod)))
+    (assoc
+      (company-factory)
+      :name name
+      :units units
+      :share-mod share-mod)))
 
 (defn get-player-stock
   ""
@@ -77,8 +107,7 @@
 
 (defn get-next-company [game-data]
   (let [current-count (count (game-data :companies))
-        next-index (inc current-count)])
-  )
+        next-index (inc current-count)]))
 
 (defn add-company [units share-mod game-data]
   (let [available (game-data :companies-queue)
@@ -162,18 +191,6 @@
   (create-company
     keyword-coord current-player const/share-modifier-base game-data))
 
-(defn get-players-shares
-  "If just the game-data parameter is passed, get all the stocks for all
-  players.
-
-  If a company-letter is passed in addition to the game-data, get the stock
-  held by all players for just that company."
-  ([game-data]
-    )
-  ([company-letter game-data]
-    )
-  )
-
 (defn get-companies-base-counts
   "For each company, count the number of pieces (bases) they have on the board."
   [game-data]
@@ -230,14 +247,20 @@
     * number of company pieces on the board adjacent to stars"
   [company-letter game-data]
   (let [share-value (get-share-value company-letter game-data)
-        total-company-shares 0]
-        ; XXX get total shares held by all players
+        total-company-shares (get-company-shares company-letter game-data)]
     (* total-company-shares share-value)))
 
 (defn get-companies-values
-  ""
-  [companies-letters game-data]
-  (map #(get-company-value % game-data) companies-letters))
+  "For each company in the game, get its value and return a hash map with this
+  data."
+  ([game-data]
+   (get-companies-values (util/get-companies-letters) game-data))
+  ([companies-letters game-data]
+    (into
+      {}
+      (map
+        (fn [x] {(keyword x) (get-company-value x game-data)})
+        companies-letters))))
 
 (defn get-filtered-companies
   ""
@@ -246,26 +269,40 @@
     (fn [x] (util/in? companies-letters (second x)))
     (game-map/get-companies-data game-data)))
 
+(defn get-greatest-company
+  "Get all company values, and identify those with the greatest value. In the
+  event of a tie, randomly select from the top-valued companies."
+  [companies-letters game-data]
+  (let [data (get-companies-values companies-letters game-data)
+        sorted (reverse
+                 (sort
+                   (map
+                     (fn [x] [(val x) (key x)])
+                     data)))]
+    (first
+      (rand-nth
+        (remove
+          empty?
+          (map
+            (fn [[val key]]
+              (if
+                (= val (first (first sorted))) [key val]))
+            sorted))))))
+
 (defn merge-companies
   ""
   [keyword-coord current-player companies game-data]
   (let [distinct-companies (distinct (map second companies))
         coord-data (get-filtered-companies distinct-companies game-data)
         companies-values (get-companies-values distinct-companies game-data)]
-
-    ; for each company in 'distinct-companies', get the coordinates for each
-    ; company piece on the board
-
-    ; the company with the largest number of held shares (summed over all
-    ; players in the game) should win
-
-    ; in the event of a tie, the company with the greatest number of pieces on
-    ; the board should win
-
-    ; in the event of that tieing, a company should be selected at random as the
-    ; winner
     (util/display (str \newline "Merging companies ..." \newline))
     (util/input const/continue-prompt)
+    ; XXX get a list of company letters elligible for merging
+    ; XXX get the top-valued company(s)
+    ; XXX for the loser, replace all the entries in the star map with the letter
+    ; from the winner
+    ; XXX recalculate value of winning company, with map updated
+    ; XXX if the stock is over the threshold, perform a split
     game-data))
 
 (defn expand-company
