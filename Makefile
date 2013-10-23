@@ -1,6 +1,7 @@
-VERSION=0.1.0
+VERSION=0.1.0-SNAPSHOT
 PROJECT=starlanes
-STANDALONE=target/$(PROJECT)-$(VERSION)-SNAPSHOT-standalone.jar
+JAR=target/$(PROJECT)-$(VERSION).jar
+STANDALONE_JAR=target/$(PROJECT)-$(VERSION)-standalone.jar
 BIN_DIR=/usr/local/bin
 
 clean:
@@ -37,8 +38,11 @@ dev:
 run:
 	@lein run
 
-standalone: build
-	java -jar $(STANDALONE)
+run-jar: build
+	java -jar $(JAR)
+
+run-jar-standalone: build
+	java -jar $(STANDALONE_JAR)
 
 kibit-only:
 	@lein with-profile testing kibit
