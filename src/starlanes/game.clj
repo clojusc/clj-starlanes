@@ -36,7 +36,7 @@
     (conj
       game-data
       {:stock-exchange
-        (finance/get-new-exchange
+        (finance/get-new-stock-exchange
           companies-letters
           players-names)})))
 
