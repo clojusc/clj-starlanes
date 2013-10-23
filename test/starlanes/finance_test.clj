@@ -179,5 +179,13 @@
               util/fake-game-data)))
   (is (= :A (finance/get-greatest-company ["A" "C"] util/fake-game-data)))
   (is (= :B (finance/get-greatest-company ["B" "C"] util/fake-game-data)))
-  (is (= :C (finance/get-greatest-company ["C" "D" "E"] util/fake-game-data))))
+  (is (= :C (finance/get-greatest-company ["C" "D" "E"] util/fake-game-data)))
+  (testing
+    "This one needs to mock out the random function used to choose in the event
+    of a tie."
+    (with-redefs [rand-nth (fn [data] (first data))]
+      (is
+        (=
+          :E
+          (finance/get-greatest-company ["D" "E"] util/fake-game-data))))))
 
