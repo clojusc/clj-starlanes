@@ -177,6 +177,7 @@
   (is (= :A (finance/get-greatest-company
               (util/get-companies-letters)
               util/fake-game-data)))
+  (is (= :C (finance/get-greatest-company ["C"] util/fake-game-data)))
   (is (= :A (finance/get-greatest-company ["A" "C"] util/fake-game-data)))
   (is (= :B (finance/get-greatest-company ["B" "C"] util/fake-game-data)))
   (is (= :C (finance/get-greatest-company ["C" "D" "E"] util/fake-game-data)))
