@@ -174,19 +174,81 @@
          (finance/get-filtered-companies ["B"] util/fake-game-data))))
 
 (deftest test-get-greatest-company
-  (is (= :A (finance/get-greatest-company
+  (is (= "A" (finance/get-greatest-company
               (util/get-companies-letters)
               util/fake-game-data)))
-  (is (= :C (finance/get-greatest-company ["C"] util/fake-game-data)))
-  (is (= :A (finance/get-greatest-company ["A" "C"] util/fake-game-data)))
-  (is (= :B (finance/get-greatest-company ["B" "C"] util/fake-game-data)))
-  (is (= :C (finance/get-greatest-company ["C" "D" "E"] util/fake-game-data)))
+  (is (= "C" (finance/get-greatest-company ["C"] util/fake-game-data)))
+  (is (= "A" (finance/get-greatest-company ["A" "C"] util/fake-game-data)))
+  (is (= "B" (finance/get-greatest-company ["B" "C"] util/fake-game-data)))
+  (is (= "C" (finance/get-greatest-company ["C" "D" "E"] util/fake-game-data)))
   (testing
     "This one needs to mock out the random function used to choose in the event
     of a tie."
     (with-redefs [rand-nth (fn [data] (first data))]
       (is
         (=
-          :E
+          "E"
           (finance/get-greatest-company ["D" "E"] util/fake-game-data))))))
+
+(deftest test-get-losers
+  (is (= #{"A" "B" "D"} (finance/get-losers "C" ["A" "B" "C" "D"]))))
+
+(deftest test-set-new-owner
+  (let [star-map (util/fake-game-data :star-map)]
+    (is (= "B" (star-map :a3)))
+    (is (= "C" (star-map :a5)))
+    (is (= "B" (star-map :b3)))
+    (is (= "A" (star-map :d1)))
+    (is (= "A" (star-map :e1)))
+    (is (= "A" (star-map :e2))))
+  (let [star-map ((finance/set-new-owner
+                    "A" "F" util/fake-game-data) :star-map)]
+    (is (= "B" (star-map :a3)))
+    (is (= "C" (star-map :a5)))
+    (is (= "B" (star-map :b3)))
+    (is (= "F" (star-map :d1)))
+    (is (= "F" (star-map :e1)))
+    (is (= "F" (star-map :e2)))))
+
+(deftest test-set-new-owners
+  (let [star-map (util/fake-game-data :star-map)]
+    (is (= "B" (star-map :a3)))
+    (is (= "C" (star-map :a5)))
+    (is (= "B" (star-map :b3)))
+    (is (= "A" (star-map :d1)))
+    (is (= "A" (star-map :e1)))
+    (is (= "A" (star-map :e2))))
+  (let [star-map ((finance/set-new-owners
+                    ["A" "B" "C"]
+                    "F"
+                    util/fake-game-data) :star-map)]
+    (is (= "F" (star-map :a3)))
+    (is (= "F" (star-map :a5)))
+    (is (= "F" (star-map :b3)))
+    (is (= "F" (star-map :d1)))
+    (is (= "F" (star-map :e1)))
+    (is (= "F" (star-map :e2)))))
+
+(deftest test-merge-companies
+  (let [star-map (util/fake-game-data :star-map)]
+    (is (= "B" (star-map :a3)))
+    (is (= "C" (star-map :a5)))
+    (is (= "B" (star-map :b3)))
+    (is (= "A" (star-map :d1)))
+    (is (= "A" (star-map :e1)))
+    (is (= "A" (star-map :e2))))
+  (let [game-data (finance/-merge-companies
+                    :a4
+                    {:name "Alice"}
+                    [[:a3 "B"] [:b3 "B"] [:a5 "C"]]
+                    util/fake-game-data)
+        star-map (game-data :star-map)]
+    (is (= "B" (star-map :a3)))
+    (is (= "B" (star-map :a5)))
+    (is (= "B" (star-map :b3)))
+    (is (= "A" (star-map :d1)))
+    (is (= "A" (star-map :e1)))
+    (is (= "A" (star-map :e2)))
+    ))
+
 

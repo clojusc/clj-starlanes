@@ -1,5 +1,5 @@
 (ns starlanes.finance
-  (:require [clojure.set :as set]
+  (:require [clojure.set :as sets]
             [starlanes.const :as const]
             [starlanes.game.map :as game-map]
             [starlanes.player :as player]
@@ -263,7 +263,8 @@
         companies-letters))))
 
 (defn get-filtered-companies
-  ""
+  "Get the company data from the game state for just the companies whose first-
+  letter abbreviation is provided."
   [companies-letters game-data]
   (filter
     (fn [x] (util/in? companies-letters (second x)))
@@ -279,31 +280,66 @@
                    (map
                      (fn [x] [(val x) (key x)])
                      data)))]
-    (first
-      (rand-nth
-        (remove
-          empty?
-          (map
-            (fn [[val key]]
-              (if
-                (= val (first (first sorted))) [key val]))
-            sorted))))))
+    (name
+      (first
+        (rand-nth
+          (remove
+            empty?
+            (map
+              (fn [[val key]]
+                (if
+                  (= val (first (first sorted))) [key val]))
+              sorted)))))))
 
-(defn merge-companies
+(defn get-losers
   ""
-  [keyword-coord current-player companies game-data]
-  (let [distinct-companies (distinct (map second companies))
-        coord-data (get-filtered-companies distinct-companies game-data)
-        companies-values (get-companies-values distinct-companies game-data)]
-    (util/display (str \newline "Merging companies ..." \newline))
-    (util/input const/continue-prompt)
-    ; XXX get a list of company letters elligible for merging
-    ; XXX get the top-valued company(s)
-    ; XXX for the loser, replace all the entries in the star map with the letter
-    ; from the winner
+  [winner all-companies]
+  (sets/difference
+    (set all-companies)
+    (set [(name winner)])))
+
+(defn set-new-owner
+  ""
+  [old-company new-company game-data]
+  (let [coords (game-map/get-item-coords old-company game-data)]
+    (game-map/multi-update-coords coords new-company game-data)))
+
+(defn set-new-owners
+  ""
+  [old-companies new-company game-data]
+  (let [old-company (first old-companies)
+        remaining (rest old-companies)]
+    (cond
+      (not (nil? old-company))
+        (set-new-owners
+          remaining
+          new-company
+          (set-new-owner old-company new-company game-data))
+      :else game-data)))
+
+(defn -merge-companies
+  "Merge the companies, given the following data:
+
+     * the keyword coordinate for the current move (e.g., :e1)
+     * data for the current player (e.g., {:name \"Carol\"})
+     * coordinate data for the companies under question (e.g.,
+      [[:d1 \"A\"] [:b1 \"B\"]])
+     * game state
+  "
+  [keyword-coord current-player companies-coords game-data]
+  (let [distinct-companies (distinct (map second companies-coords))
+        winner (get-greatest-company distinct-companies game-data)
+        losers (get-losers winner distinct-companies)
+        new-game-data (set-new-owners losers winner game-data)]
     ; XXX recalculate value of winning company, with map updated
     ; XXX if the stock is over the threshold, perform a split
-    game-data))
+    new-game-data))
+
+(defn merge-companies
+  [keyword-coord current-player companies-coords game-data]
+  (util/display (str \newline "Merging companies ..." \newline))
+  (-merge-companies keyword-coord current-player companies-coords game-data)
+  (util/input const/continue-prompt))
 
 (defn expand-company
   ""
@@ -315,8 +351,11 @@
     ; more details:
     ;   https://github.com/oubiwann/star-traders/issues/7
     ; we're going to want to create a function that takes a list of neighbor
-    ; outposts, converts them to the company, and then recursing on all those
+    ; outposts, converts them to the company, and then recurses on all those
     ; outposts' neighbors that are outposts, performing the same action
+    ;
+    ; So probably the best way to do this is to have a function whose
+    ; responsibility it is to
     (game-map/multi-update-coords
       (concat outpost-coords [keyword-coord])
       company-letter
