@@ -47,13 +47,13 @@
   [keyword-coords coord-item game-data]
   (let [keyword-coord (first keyword-coords)
         remaining (rest keyword-coords)]
-  (cond
-    (not (nil? keyword-coord))
-      (multi-update-coords
-        remaining
-        coord-item
-        (update-coords keyword-coord coord-item game-data))
-    :else game-data)))
+    (cond
+      (not (nil? keyword-coord))
+        (multi-update-coords
+          remaining
+          coord-item
+          (update-coords keyword-coord coord-item game-data))
+      :else game-data)))
 
 (defn get-empty-coord [coord-data]
   (if (util/coord-open? coord-data (const/items :empty))
