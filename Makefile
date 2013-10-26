@@ -25,7 +25,7 @@ $(BIN_DIR)/lein-exec-p:
 
 script-setup: $(BIN_DIR)/lein-exec $(BIN_DIR)/lein-exec-p
 
-build:
+build: clean
 	@lein compile
 	@lein uberjar
 
