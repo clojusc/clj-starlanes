@@ -127,6 +127,10 @@
   (is (= 1 (util/get-max-total-moves 1 1)))
   (is (= 0 (util/get-max-total-moves 0 0))))
 
+(deftest test-get-company-name
+  (is (= "Altair Starways" (util/get-company-name :A)))
+  (is (= "Luyten, Ltd." (util/get-company-name :L))))
+
 (deftest test-get-companies
   (is (= ["Altair Starways"
           "Betelgeuse, Ltd."
