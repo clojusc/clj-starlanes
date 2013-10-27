@@ -69,6 +69,8 @@
 (defn tally-scores [game-data]
   (util/display (str \newline
                      "Tallying scores ..." \newline))
+  (finance/display-companies-values game-data)
+  (finance/display-players-earnings game-data)
   ; XXX get top-score
   ; XXX determine tie-breaking, if necessary
   ; XXX display "scoreboard"
@@ -96,10 +98,16 @@
       (setup-game)
     (util/in? (game-command/get-commands "save") command)
       (game-command/save-game game-data)
+    (util/in? (game-command/get-commands "dump") command)
+      (cond
+        const/debug (game-command/dump-game-state game-data)
+        :else (util/display "Debugging not enabled."))
     (util/in? (game-command/get-commands "score") command)
       (game-command/display-score game-data)
     (util/in? (game-command/get-commands "stock") command)
-      (finance/display-stock game-data)))
+      (finance/display-player-earnings
+        ((game-move/get-current-player game-data) :name)
+        game-data)))
 
 (defn process-command
   "For command functions that return 'nil', simply run 'do-player-turn' again
