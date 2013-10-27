@@ -69,7 +69,7 @@ The easiest way to play the game is simply this:
 
     $ git clone https://github.com/oubiwann/clj-starlanes.git
     $ cd clj-starlanes
-    $ make run
+    $ make run-jar-standalone
 
 You will need to have Java, Clojure, and `Leiningen`_ installed. `lein` will
 need to be in your `$PATH`. Also, note that doing `make run` for the first
