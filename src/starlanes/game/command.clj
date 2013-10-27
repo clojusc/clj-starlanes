@@ -18,6 +18,7 @@
   {:command "restart" :alias "" :help "restart the game"}
   {:command "quit" :alias "q" :help "shutdown the game; same as 'exit'"}
   {:command "save" :alias "" :help "save the current state of the game"}
+  {:command "dump" :alias "" :help "display current game state (debugging)"}
   {:command "score" :alias "" :help "show the current score"}
   {:command "stock" :alias "s" :help "show the current player's assets"}])
 
@@ -128,3 +129,11 @@
   (let [answer (util/input const/confirm-prompt)]
     (cond
       (= answer "y") (do (cleanup-fn game-data) (util/exit)))))
+
+(defn dump-game-state [game-data]
+  (util/display (str \newline
+                     "Current game state:" \newline \newline))
+  (util/display game-data)
+  (util/display (str \newline \newline))
+  (util/input const/continue-prompt)
+  nil)
