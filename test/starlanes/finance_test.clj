@@ -84,6 +84,9 @@
 (deftest test-get-player-shares-with-companies
   (is (= [[:A 100] [:B 1000] [:C 100]]
          (finance/get-player-shares-with-companies
+           "Carol" util/fake-game-data)))
+  (is (= [[:A 100] [:B 1000] [:C 100]]
+         (finance/get-player-shares-with-companies
            ["A" "B" "C"] "Carol" util/fake-game-data))))
 
 (deftest test-get-players-shares-with-player
@@ -101,15 +104,17 @@
           "Carol" {:A 100, :B 1000, :C 100}}
          (finance/get-players-shares ["A" "B" "C"] util/fake-game-data))))
 
+(deftest test-add-player-shares
+  (is (= 1000 (finance/get-player-shares "A" "Alice" util/fake-game-data)))
+  (let [game-data (finance/add-player-shares
+                    "A" "Alice" 1000 util/fake-game-data)]
+    (is (= 2000 (finance/get-player-shares "A" "Alice" game-data)))))
+
 (deftest test-get-new-company
   (let [result (finance/get-new-company)]
-    (is (= (result :name) ""))
-    (is (= (result :units) 0))
-    (is (= (result :share-mod) 0.0)))
-  (let [result (finance/get-new-company "A" 2 25.00)]
-    (is (= (result :name) "A"))
-    (is (= (result :units) 2))
-    (is (= (result :share-mod) 25.00))))
+    (is (= (result :name) "")))
+  (let [result (finance/get-new-company "A")]
+    (is (= (result :name) "A"))))
 
 (deftest test-compute-value
   (let [assets [1000 [{:stock 12 :value 23.50} {:stock 100 :value 50}]]]
@@ -117,33 +122,34 @@
     (is (= 6282.0 (finance/compute-value (first assets) (second assets))))))
 
 (deftest test-add-company
-  (is (= [] (util/fake-game-data :companies)))
-  (let [[company-name game-data] (finance/add-company
-                                   2 55.00 util/fake-game-data)]
-    (is (= [{:share-mod 55.0 :units 2 :name "Al"}] (game-data :companies)))
-    (is (= ["Be" "Ca" "De" "Er"] (game-data :companies-queue)))
-    (is (= "Al" company-name))
-    (let [[company-name game-data] (finance/add-company 3 22.00 game-data)]
-      (is (= [{:share-mod 55.0 :units 2 :name "Al"}
-              {:share-mod 22.0 :units 3 :name "Be"}] (game-data :companies)))
-      (is (= ["Ca" "De" "Er"] (game-data :companies-queue)))
-      (is (= "Be" company-name)))))
+  (is (= [{:name "Al"} {:name "Be"} {:name "Ca"}]
+         (util/fake-game-data :companies)))
+  (let [[company-name game-data] (finance/add-company util/fake-game-data)]
+    (is (= [{:name "Al"} {:name "Be"} {:name "Ca"} {:name "De"}]
+           (game-data :companies)))
+    (is (= ["Er"] (game-data :companies-queue)))
+    (is (= "De" company-name))
+    (let [[company-name game-data] (finance/add-company game-data)]
+      (is (= [{:name "Al"} {:name "Be"} {:name "Ca"} {:name "De"} {:name "Er"}]
+             (game-data :companies)))
+      (is (= [] (game-data :companies-queue)))
+      (is (= "Er" company-name)))))
 
 (deftest test-filter-company
-  (let [companies [{:name "A" :units 1 :share-mod 0.01}
-                   {:name "B" :units 2 :share-mod 10}]]
-    (is (= [{:share-mod 0.01 :units 1 :name "A"}
-            {:share-mod 10 :units 2 :name "B"}]
+  (let [companies [{:name "A"}
+                   {:name "B"}]]
+    (is (= [{:name "A"}
+            {:name "B"}]
            (finance/filter-company "a" companies)))
-    (is (= [{:share-mod 10 :units 2 :name "B"}]
+    (is (= [{:name "B"}]
            (finance/filter-company "A" companies)))))
 
 (deftest test-remove-company
-  (let [game-data {:companies [{:share-mod 55.0 :units 3 :name "Al"}
-                               {:share-mod 22.0 :units 4 :name "Be"}]
+  (let [game-data {:companies [{:name "Al"}
+                               {:name "Be"}]
                    :companies-queue ["Ca" "De" "Er"]}
         game-data (finance/remove-company "Al" game-data)]
-    (is (= [{:share-mod 22.0 :units 4 :name "Be"}] (game-data :companies)))
+    (is (= [{:name "Be"}] (game-data :companies)))
     (is (= ["Al" "Ca" "De" "Er"] (game-data :companies-queue)))))
 
 (deftest test-get-companies-base-counts

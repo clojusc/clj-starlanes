@@ -50,10 +50,15 @@
      company-letter player-name game-data)])
 
 (defn get-player-shares-with-companies
-  [companies-letters player-name game-data]
-  (map
-    #(get-player-shares-with-company % player-name game-data)
-    companies-letters))
+  ([player-name game-data]
+   (get-player-shares-with-companies
+     (util/get-companies-letters game-data)
+     player-name
+     game-data))
+  ([companies-letters player-name game-data]
+    (map
+      #(get-player-shares-with-company % player-name game-data)
+      companies-letters)))
 
 (defn get-players-shares-with-player
   [companies-letters player-name game-data]
@@ -74,31 +79,28 @@
             #(get-players-shares-with-player companies-letters % game-data)
             (player/get-players-names game-data)))))
 
+(defn add-player-shares
+  [company-letter player-name new-shares game-data]
+  (let [company-keyword (keyword company-letter)
+        exchange-data (get-stock-exchange game-data)
+        company-data (exchange-data company-keyword)
+        player-data (company-data player-name)
+        old-shares (get-player-shares company-letter player-name game-data)
+        player-data (conj player-data {:shares (+ new-shares old-shares)})
+        company-data (conj company-data {player-name player-data})
+        exchange-data (conj exchange-data {company-keyword company-data})]
+    (conj game-data {:stock-exchange exchange-data})))
+
 (defn company-factory []
-  {:name ""
-   :share-mod 0.0
-   :units 0})
+  {:name ""})
 
 (defn get-new-company
   ([]
     (company-factory))
-  ([name units share-mod]
+  ([name]
     (assoc
       (company-factory)
-      :name name
-      :units units
-      :share-mod share-mod)))
-
-(defn get-player-stock
-  ""
-  [player-name game-data]
-  )
-
-(defn display-stock [game-data]
-  (util/display
-    (str \newline "Here's your current stock: " \newline \newline))
-  (util/input const/continue-prompt)
-  nil)
+      :name name)))
 
 (defn compute-stock-value [{stock :stock value :value}]
   (* stock value))
@@ -115,18 +117,15 @@
   ([cash stocks-data]
     (+ cash (compute-stocks-value stocks-data))))
 
-(defn display-value [value]
-  )
-
 (defn get-next-company [game-data]
   (let [current-count (count (game-data :companies))
         next-index (inc current-count)]))
 
-(defn add-company [units share-mod game-data]
+(defn add-company [game-data]
   (let [available (game-data :companies-queue)
         company-name (first available)
         game-data (conj game-data {:companies-queue (rest available)})
-        company (get-new-company company-name units share-mod)
+        company (get-new-company company-name)
         companies (concat (game-data :companies) [company])]
     [company-name (conj game-data {:companies companies})]))
 
@@ -167,10 +166,6 @@
   (announce-new-company company-name)
   (announce-player-bonus current-player company-name units mod))
 
-(defn update-player-stock [current-player units game-data]
-  game-data
-  )
-
 (defn create-company
   "Creating a company should only ever happen if all attempts have been made
   to identify possibly merges, first. As such, there should never be another
@@ -180,13 +175,14 @@
   (let [outpost-coords (map first (game-map/get-neighbor-outposts
                                     keyword-coord game-data))
         units (count outpost-coords)
-        [company-name game-data] (add-company units share-modifier game-data)
+        [company-name game-data] (add-company game-data)
         item-char (str (first company-name))]
     (make-announcements
       current-player company-name (inc units) share-modifier)
-    (update-player-stock
-      current-player
-      units
+    (add-player-shares
+      item-char
+      (current-player :name)
+      const/founding-shares
       (game-map/multi-update-coords
         (concat outpost-coords [keyword-coord])
         item-char
@@ -343,16 +339,20 @@
   (let [distinct-companies (distinct (map second companies-coords))
         winner (get-greatest-company distinct-companies game-data)
         losers (get-losers winner distinct-companies)
-        new-game-data (set-new-owners losers winner game-data)]
+        game-data (set-new-owners losers winner game-data)]
     ; XXX recalculate value of winning company, with map updated
     ; XXX if the stock is over the threshold, perform a split
-    new-game-data))
+    game-data))
 
 (defn merge-companies
   [keyword-coord current-player companies-coords game-data]
   (util/display (str \newline "Merging companies ..." \newline))
-  (-merge-companies keyword-coord current-player companies-coords game-data)
-  (util/input const/continue-prompt))
+  (let [game-data (-merge-companies keyword-coord
+                                    current-player
+                                    companies-coords
+                                    game-data)]
+    (util/input const/continue-prompt)
+    game-data))
 
 (defn expand-company
   ""
@@ -362,7 +362,7 @@
                                     keyword-coord game-data))]
     ; XXX this is an insufficient final solution; see the following issue for
     ; more details:
-    ;   https://github.com/oubiwann/star-traders/issues/7
+    ;   https://github.com/oubiwann/clj-starlanes/issues/6
     ; we're going to want to create a function that takes a list of neighbor
     ; outposts, converts them to the company, and then recurses on all those
     ; outposts' neighbors that are outposts, performing the same action
@@ -374,5 +374,28 @@
       company-letter
       game-data)))
 
+(defn get-named-shares [player-name game-data]
+  (map
+    (fn [[x y]] [(util/get-company-name x) y])
+    (get-player-shares-with-companies player-name game-data)))
 
+(defn display-player-earnings [player-name game-data]
+  (let [shares (get-named-shares player-name game-data)]
+    (util/display
+      (str \newline "Here are your current earnings: " \newline \newline))
+    (doseq [[company share] shares]
+      (let [share-price (get-share-value (str (first company)) game-data)
+            value (* share share-price)]
+        (util/display
+          (str \tab company ": " value " ("share " shares @" share-price
+               " " const/currency-name "s each)" \newline))))
+    (util/display \newline)
+    (util/input const/continue-prompt)
+    nil))
+
+(defn display-companies-values [game-data]
+  )
+
+(defn display-players-earnings [game-data]
+  )
 
