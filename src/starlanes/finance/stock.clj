@@ -103,3 +103,20 @@
     (apply compute-value assets))
   ([cash stocks-data]
     (+ cash (compute-stocks-value stocks-data))))
+
+(defn remove-company [company-keyword game-data]
+  (conj
+    game-data
+    {:stock-exchange (dissoc
+                       (get-stock-exchange game-data)
+                       company-keyword)}))
+
+(defn remove-companies [companies-keywords game-data]
+  (conj
+    game-data
+    {:stock-exchange (apply
+                       dissoc
+                       (get-stock-exchange game-data)
+                       companies-keywords)}))
+
+

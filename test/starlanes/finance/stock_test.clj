@@ -114,3 +114,14 @@
   (let [assets [1000 [{:stock 12 :value 23.50} {:stock 100 :value 50}]]]
     (is (= 6282.0 (stock/compute-value assets)))
     (is (= 6282.0 (stock/compute-value (first assets) (second assets))))))
+
+(deftest test-remove-company
+  (is (= {:C {"Carol" {:shares 100}, "Bob" {:shares 500}}
+          :B {"Carol" {:shares 1000}}}
+         ((stock/remove-company :A util/fake-game-data) :stock-exchange))))
+
+(deftest test-remove-company
+  (is (= {:B {"Carol" {:shares 1000}}}
+         ((stock/remove-companies
+            [:A :C]
+            util/fake-game-data) :stock-exchange))))
