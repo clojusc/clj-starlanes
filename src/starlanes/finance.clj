@@ -32,8 +32,8 @@
                           (str (first company-name)) game-data)
             value (* share share-price)]
         (display-company-data company-name share share-price value)))
-    (util/display \newline)
     (display-companies-values game-data)
+    (util/display \newline)
     (util/display \newline)
     (util/input const/continue-prompt)
     nil))

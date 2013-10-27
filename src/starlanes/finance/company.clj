@@ -240,7 +240,7 @@
         game-data (set-new-owners losers winner game-data)]
     ; XXX recalculate value of winning company, with map updated
     ; XXX if the stock is over the threshold, perform a split
-    game-data))
+    (game-map/update-coords keyword-coord winner game-data)))
 
 (defn merge-companies
   [keyword-coord current-player companies-coords game-data]
