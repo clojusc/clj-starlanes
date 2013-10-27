@@ -2,6 +2,8 @@
   (:require [clojure.string :as string]
             [starlanes.const :as const]
             [starlanes.finance :as finance]
+            [starlanes.finance.company :as company]
+            [starlanes.finance.stock :as stock]
             [starlanes.game.map :as game-map]
             [starlanes.game.movement :as game-move]
             [starlanes.game.command :as game-command]
@@ -36,7 +38,7 @@
     (conj
       game-data
       {:stock-exchange
-        (finance/get-new-stock-exchange
+        (stock/get-new-stock-exchange
           companies-letters
           players-names)})))
 

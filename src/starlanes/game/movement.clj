@@ -3,6 +3,7 @@
             [starlanes.const :as const]
             [starlanes.game.map :as game-map]
             [starlanes.finance :as finance]
+            [starlanes.finance.company :as company]
             [starlanes.util :as util]))
 
 
@@ -57,19 +58,19 @@
       (game-map/next-to-company? keyword-coord game-data)
         (cond
           (> company-count 1)
-            (finance/merge-companies
+            (company/merge-companies
               keyword-coord (get-current-player game-data) companies game-data)
           :else
-            (finance/expand-company
+            (company/expand-company
               keyword-coord (get-current-player game-data) (first companies)
               game-data))
       ; is the move next to a star?
       (game-map/next-to-star? keyword-coord game-data)
-        (finance/create-star-company
+        (company/create-star-company
           keyword-coord (get-current-player game-data) game-data)
       ; is the move next to an outpost?
       (game-map/next-to-outpost? keyword-coord game-data)
-        (finance/create-outpost-company
+        (company/create-outpost-company
           keyword-coord (get-current-player game-data) game-data)
       ; if no neighbors at all, make it an outpost
       :else
