@@ -133,11 +133,15 @@
           "Capella Cargo Co."
           "Denebola Shippers"
           "Eridani Expediters"]
-         (util/get-companies))))
+         (util/get-companies)))
+  (is (= ["Al" "Be" "Ca"]
+         (util/get-companies util/fake-game-data))))
 
 (deftest test-get-companies-letters
   (is (= ["A" "B" "C" "D" "E"]
-         (util/get-companies-letters))))
+         (util/get-companies-letters)))
+  (is (= ["A" "B" "C"]
+         (util/get-companies-letters util/fake-game-data))))
 
 (deftest test-count-occurances
   (is (= {3 1, 2 2, 1 3}

@@ -29,8 +29,10 @@
     {:name "Carol"}],
    :player-order [1 0],
    :move 0,
-   :companies [],
-   :companies-queue ["Al" "Be" "Ca" "De" "Er"],
+   :companies [{:name "Al"}
+               {:name "Be"}
+               {:name "Ca"}],
+   :companies-queue ["De" "Er"],
    :stock-exchange fake-finance-data,
    :rand nil})
 
@@ -186,13 +188,24 @@
   ([max-turns player-count]
     (* max-turns player-count)))
 
-(defn get-companies []
-  (take const/max-companies const/companies))
+(defn get-companies
+  "With no parameter, this function returns the names of all the potential
+  companies for the game.
 
-(defn get-companies-letters []
-  (map
-    (comp str first)
-    (get-companies)))
+  If game-data is provided, it will instead return the names of just the
+  companies that are on the board."
+  ([]
+    (take const/max-companies const/companies))
+  ([game-data]
+   (map
+     (fn [x] (x :name))
+     (game-data :companies))))
+
+(defn get-companies-letters
+  ([]
+   (map (comp str first) (get-companies)))
+  ([game-data]
+   (map (comp str first) (get-companies game-data))))
 
 (defn get-companies-keys []
   (map keyword (get-companies-letters)))
