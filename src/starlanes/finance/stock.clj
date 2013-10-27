@@ -25,7 +25,7 @@
   [company-letter game-data]
   (reduce +
           (map
-            (fn [x] (x :shares))
+            (fn [x] (or (:shares x) 0))
             (vals
               (get-company-holdings company-letter game-data)))))
 
