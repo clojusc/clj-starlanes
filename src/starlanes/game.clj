@@ -31,7 +31,7 @@
 (defn set-new-stock-exchange
   ""
   [game-data]
-  (let [companies-letters (map first (util/get-companies))
+  (let [companies-letters (util/get-companies-letters)
         players-names (map (fn [x] (x :name)) (game-data :players))]
     (conj
       game-data
