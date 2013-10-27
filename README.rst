@@ -52,7 +52,7 @@ Clojure Implementation
 ======================
 
 This Clojure implementation follows the *Star Lanes* path, since that's the one
-that I played as a kid on a CP\M Kaypro II back in '81. It does, however,
+that I played as a kid on a CP\\M Kaypro II back in '81. It does, however,
 provide for a more diverse game play, with an extended map and greater number
 of companies (both configurable).
 
