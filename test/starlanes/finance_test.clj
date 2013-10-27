@@ -70,6 +70,27 @@
   (is (= 100 (finance/get-player-shares "C" "Carol" util/fake-game-data)))
   (is (= 0 (finance/get-player-shares "Z" "Bob" util/fake-game-data))))
 
+(deftest test-get-player-shares-with-company
+  (is (= [:A 100]
+         (finance/get-player-shares-with-company
+           "A" "Carol" util/fake-game-data)))
+  (is (= [:B 1000]
+         (finance/get-player-shares-with-company
+           "B" "Carol" util/fake-game-data)))
+  (is (= [:C 100]
+         (finance/get-player-shares-with-company
+           "C" "Carol" util/fake-game-data))))
+
+(deftest test-get-player-shares-with-companies
+  (is (= [[:A 100] [:B 1000] [:C 100]]
+         (finance/get-player-shares-with-companies
+           ["A" "B" "C"] "Carol" util/fake-game-data))))
+
+(deftest test-get-players-shares-with-player
+  (is (= ["Carol" {:A 100, :B 1000, :C 100}]
+         (finance/get-players-shares-with-player
+           ["A" "B" "C"] "Carol" util/fake-game-data))))
+
 (deftest test-get-players-shares
   (is (= {"Alice" {:A 1000, :B 0, :C 0, :D 0, :E 0},
           "Bob" {:A 500, :B 0, :C 500, :D 0, :E 0},

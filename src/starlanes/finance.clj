@@ -44,6 +44,26 @@
           0))
       0)))
 
+(defn get-player-shares-with-company [company-letter player-name game-data]
+  [(keyword company-letter)
+   (get-player-shares
+     company-letter player-name game-data)])
+
+(defn get-player-shares-with-companies
+  [companies-letters player-name game-data]
+  (map
+    #(get-player-shares-with-company % player-name game-data)
+    companies-letters))
+
+(defn get-players-shares-with-player
+  [companies-letters player-name game-data]
+  [player-name
+   (into {}
+         (get-player-shares-with-companies
+           companies-letters
+           player-name
+           game-data))])
+
 (defn get-players-shares
   ""
   ([game-data]
@@ -51,14 +71,7 @@
   ([companies-letters game-data]
     (into {}
           (map
-            (fn [player-name]
-              [player-name (into {}
-                       (map
-                         (fn [company-letter]
-                           [(keyword company-letter)
-                            (get-player-shares
-                              company-letter player-name game-data)])
-                         companies-letters))])
+            #(get-players-shares-with-player companies-letters % game-data)
             (player/get-players-names game-data)))))
 
 (defn company-factory []
