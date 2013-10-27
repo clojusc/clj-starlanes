@@ -188,6 +188,16 @@
   ([max-turns player-count]
     (* max-turns player-count)))
 
+(defn get-company-name
+  "Given a letter, get the company name to which it corresponds."
+  [letter-keyword]
+  ((into
+     {}
+     (map
+       (fn [x] [(keyword (str (first x))) x])
+       const/companies))
+   letter-keyword))
+
 (defn get-companies
   "With no parameter, this function returns the names of all the potential
   companies for the game.
