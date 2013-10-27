@@ -32,16 +32,10 @@
 (defn get-player-shares
   ""
   [company-letter player-name game-data]
-  (let [company-holdings (get-company-holdings company-letter game-data)]
-    (if company-holdings
-      (let [player-holdings (company-holdings player-name)]
-        (if player-holdings
-          (let [player-shares (player-holdings :shares)]
-            (if player-shares
-              player-shares
-              0))
-          0))
-      0)))
+  (get-in
+    game-data
+    [:stock-exchange (keyword company-letter) player-name :shares]
+    0))
 
 (defn get-player-shares-with-company [company-letter player-name game-data]
   [(keyword company-letter)
