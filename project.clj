@@ -8,6 +8,9 @@
   :plugins [[lein-exec "0.3.1"]]
   :aot [starlanes.trader]
   :main starlanes.trader
+  :test-selectors {:default (complement :integration)
+                   :integration :integration
+                   :all (constantly true)}
   :profiles {
     :dev {
       :dependencies [[org.clojure/tools.namespace "0.2.3"]
