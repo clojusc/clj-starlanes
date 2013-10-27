@@ -72,9 +72,9 @@ The easiest way to play the game is simply this:
     $ make run-jar-standalone
 
 You will need to have Java, Clojure, and `Leiningen`_ installed. `lein` will
-need to be in your `$PATH`. Also, note that doing `make run` for the first
-time will download all the other dependencies automatically, so you will see
-lots of text scrolling in your terminal while it does so.
+need to be in your `$PATH`. Also, note that running most of the `make` targets
+for the first time will download all the dependencies automatically, so you will
+see lots of text scrolling in your terminal while it does so.
 
 Enjoy!
 
