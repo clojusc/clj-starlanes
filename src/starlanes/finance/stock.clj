@@ -79,15 +79,10 @@
 
 (defn add-player-shares
   [company-letter player-name new-shares game-data]
-  (let [company-keyword (keyword company-letter)
-        exchange-data (get-stock-exchange game-data)
-        company-data (exchange-data company-keyword)
-        player-data (company-data player-name)
-        old-shares (get-player-shares company-letter player-name game-data)
-        player-data (conj player-data {:shares (+ new-shares old-shares)})
-        company-data (conj company-data {player-name player-data})
-        exchange-data (conj exchange-data {company-keyword company-data})]
-    (conj game-data {:stock-exchange exchange-data})))
+  (update-in
+    game-data
+    [:stock-exchange (keyword company-letter) player-name :shares]
+    + new-shares))
 
 (defn compute-stock-value [{stock :stock value :value}]
   (* stock value))
