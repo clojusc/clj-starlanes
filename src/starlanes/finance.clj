@@ -43,9 +43,10 @@
           (str \tab company-name ": " total-value \newline))))))
 
 (defn display-player-earnings [player-name game-data]
+  (util/clear-screen)
   (util/display
     (str "Here is your balance for cash-on-hand:" \newline \newline
-         (get-player-cash player-name) \newline))
+         (get-player-cash player-name game-data) \newline))
   (let [shares (stock/get-named-shares player-name game-data)]
     (util/display
       (str \newline "Here are your current earnings: " \newline \newline))
@@ -74,6 +75,6 @@
                  values)))))
 
 (defn pay-dividends [game-data]
-  (let [player (game-move/get-current-player game-data)
-        dividends (get-dividends (player :name) game-data)]
-    game-data))
+  (let [player-name ((game-move/get-current-player game-data) :name)
+        dividends (get-dividends player-name game-data)]
+    (add-player-cash player-name dividends game-data)))
