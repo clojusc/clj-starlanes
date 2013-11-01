@@ -179,9 +179,9 @@
 
 (defn do-player-turn
   ([game-data]
-    (do-player-turn
-      game-data
-      (game-move/get-friendly-moves game-data)))
+    (do-player-turn game-data
+                    (game-move/get-friendly-moves
+                      (finance/pay-dividends game-data))))
   ([game-data available-moves]
     (display-map-and-moves game-data available-moves)
     (let-player-purchase-stocks
