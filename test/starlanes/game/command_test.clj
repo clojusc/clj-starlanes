@@ -7,14 +7,14 @@
 (deftest test-get-commands
   (is (= '(("commands" "c") ("exit" "x") ("help" "h") ("load") ("map" "m")
            ("order" "o") ("restart") ("quit" "q") ("save") ("dump") ("score")
-           ("stock" "s"))
+           ("stock" "s") ("ticker" "t"))
          (game/get-commands)))
   (is (= ["stock" "s"] (game/get-commands "stock")))
   (is (= ["load"] (game/get-commands "load"))))
 
 (deftest test-get-legal-commands
   (is (= ["commands" "c" "exit" "x" "help" "h" "load" "map" "m" "order" "o"
-          "restart" "quit" "q" "save" "dump" "score" "stock" "s"]
+          "restart" "quit" "q" "save" "dump" "score" "stock" "s" "ticker" "t"]
          (game/get-legal-commands))))
 
 (deftest test-legal?
