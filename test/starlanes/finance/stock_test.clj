@@ -68,7 +68,8 @@
   (is (= 1000 (stock/get-player-shares "B" "Carol" util/fake-game-data)))
   (is (= 500 (stock/get-player-shares "C" "Bob" util/fake-game-data)))
   (is (= 100 (stock/get-player-shares "C" "Carol" util/fake-game-data)))
-  (is (= 0 (stock/get-player-shares "Z" "Bob" util/fake-game-data))))
+  (is (= 0 (stock/get-player-shares "Z" "Bob" util/fake-game-data)))
+  (is (= 5 (count (stock/get-player-shares "Carol" util/fake-game-data)))))
 
 (deftest test-get-player-shares-with-company
   (is (= [:A 100]
