@@ -34,13 +34,21 @@
   ""
   [game-data]
   (let [companies-letters (util/get-companies-letters)
-        players-names (map (fn [x] (x :name)) (game-data :players))]
+        players-names (map #(% :name) (game-data :players))]
     (conj
       game-data
       {:stock-exchange
         (stock/get-new-stock-exchange
           companies-letters
           players-names)})))
+
+(defn set-new-bank
+  ""
+  [game-data]
+  (let [players-names (map #(% :name) (game-data :players))]
+    (conj
+      game-data
+      {:bank (finance/get-new-bank players-names)})))
 
 (defn set-new-players
   ([]
@@ -54,8 +62,9 @@
   (let [game-init (game-data-factory)
         game-with-star-map (create-star-map-for-game game-init)
         game-with-players (set-new-players game-with-star-map)
-        game-with-player-order (player/determine-player-order game-with-players)]
-    (set-new-stock-exchange game-with-player-order)))
+        game-with-player-order (player/determine-player-order game-with-players)
+        game-with-bank (set-new-bank game-with-player-order)]
+    (set-new-stock-exchange game-with-bank)))
 
 (defn setup-game [& {:keys [first-time?] :or {first-time? true}}]
   (util/clear-screen)
