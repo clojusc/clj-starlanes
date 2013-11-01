@@ -2,6 +2,7 @@
   (:require [clojure.set :as sets]
             [starlanes.const :as const]
             [starlanes.game.map :as game-map]
+            [starlanes.game.movement :as game-move]
             [starlanes.finance.stock :as stock]
             [starlanes.finance.company :as company]
             [starlanes.player :as player]
@@ -24,6 +25,9 @@
           (str \tab company-name ": " total-value \newline))))))
 
 (defn display-player-earnings [player-name game-data]
+  (util/display
+    (str "Here is your balance for cash-on-hand:" \newline \newline
+         (player/get-cash player-name) \newline))
   (let [shares (stock/get-named-shares player-name game-data)]
     (util/display
       (str \newline "Here are your current earnings: " \newline \newline))
@@ -41,3 +45,17 @@
 (defn display-players-earnings [game-data]
   )
 
+(defn get-dividends [player-name game-data]
+  (let [shares (stock/get-player-shares-with-companies player-name game-data)
+        values (company/get-share-values game-data)]
+    (* const/dividend-percentage
+       (reduce +
+               (map
+                 #(* (second %1) %2)
+                 shares
+                 values)))))
+
+(defn pay-dividends [game-data]
+  (let [player (game-move/get-current-player game-data)
+        dividends (get-dividends (player :name) game-data)]
+    game-data))
