@@ -174,6 +174,9 @@
       (process-command game-data available-moves move)
     :else (do-bad-input game-data available-moves move)))
 
+(defn let-player-purchase-stocks [game-data]
+  game-data)
+
 (defn do-player-turn
   ([game-data]
     (do-player-turn
@@ -181,8 +184,8 @@
       (game-move/get-friendly-moves game-data)))
   ([game-data available-moves]
     (display-map-and-moves game-data available-moves)
-    (validate-move
-      game-data
-      available-moves
-      (string/lower-case
-        (get-player-move)))))
+    (let-player-purchase-stocks
+      (validate-move game-data
+                     available-moves
+                     (string/lower-case
+                       (get-player-move)))))
