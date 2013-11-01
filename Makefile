@@ -5,7 +5,7 @@ STANDALONE_JAR=target/$(PROJECT)-$(VERSION)-standalone.jar
 BIN_DIR=/usr/local/bin
 
 clean:
-	rm -rf target
+	rm -rf target/*.jar
 
 $(BIN_DIR)/lein-exec:
 	wget https://raw.github.com/kumarshantanu/lein-exec/master/lein-exec
