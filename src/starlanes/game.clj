@@ -135,8 +135,9 @@
 
 (defn process-move [game-data move]
   (do-player-turn
-    (game-move/inc-move
-      (game-move/update-map-with-move move game-data))))
+    (finance/let-player-purchase-stocks
+      (game-move/inc-move
+        (game-move/update-map-with-move move game-data)))))
 
 (defn play-again? []
   (let [response (util/input
@@ -180,17 +181,13 @@
       (process-command game-data available-moves move)
     :else (do-bad-input game-data available-moves move)))
 
-(defn let-player-purchase-stocks [game-data]
-  game-data)
-
 (defn do-player-turn
   ([game-data]
     (do-player-turn game-data
                     (game-move/get-friendly-moves game-data)))
   ([game-data available-moves]
     (display-map-and-moves game-data available-moves)
-    (let-player-purchase-stocks
-      (validate-move (finance/pay-dividends game-data)
-                     available-moves
-                     (string/lower-case
-                       (get-player-move))))))
+    (validate-move (finance/pay-dividends game-data)
+                   available-moves
+                   (string/lower-case
+                     (get-player-move)))))
