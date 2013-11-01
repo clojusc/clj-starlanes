@@ -4,7 +4,13 @@
             [starlanes.const :as const]))
 
 
-(def fake-finance-data
+(def fake-bank-data
+  {"Alice" {:cash 200}
+
+   "Bob" {:cash 260}
+   "Carol" {:cash 570}})
+
+(def fake-exchange-data
   {:A
     {"Alice" {:shares 1000}
      "Bob" {:shares 500}
@@ -33,7 +39,8 @@
                {:name "Be"}
                {:name "Ca"}],
    :companies-queue ["De" "Er"],
-   :stock-exchange fake-finance-data,
+   :bank fake-bank-data,
+   :stock-exchange fake-exchange-data,
    :rand nil})
 
 (defn display [data]

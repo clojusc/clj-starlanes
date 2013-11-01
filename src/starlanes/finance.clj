@@ -9,6 +9,15 @@
             [starlanes.util :as util]))
 
 
+(defn get-new-bank [players-names]
+  (into {}
+        (map
+          #(vector % {:cash 0.0})
+          players-names)))
+
+(defn get-bank [game-data]
+  (game-data :bank))
+
 (defn display-company-data [company-name shares share-price share-value]
   (util/display
     (str \tab company-name ": " share-value " (" shares " shares @ "
