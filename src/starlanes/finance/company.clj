@@ -160,6 +160,15 @@
     #(get-share-value % game-data)
     (util/get-companies-letters)))
 
+(defn get-share-values-with-company
+  ""
+  [game-data]
+  (map
+    #(vector
+      (util/get-company-name (keyword %))
+      (get-share-value % game-data))
+    (util/get-companies-letters)))
+
 (defn get-company-value
   "Things that affect company value:
     * total number of shares held by all players

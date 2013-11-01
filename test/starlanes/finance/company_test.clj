@@ -82,6 +82,12 @@
 (deftest test-get-share-values
   (is (= [1800 700 100 0 0] (company/get-share-values util/fake-game-data))))
 
+(deftest test-get-share-values-with-company
+  (is (= [["Altair Starways" 1800] ["Betelgeuse, Ltd." 700]
+          ["Capella Cargo Co." 100] ["Denebola Shippers" 0]
+          ["Eridani Expediters" 0]]
+         (company/get-share-values-with-company util/fake-game-data))))
+
 (deftest test-get-company-value
   (is (= 2880000 (company/get-company-value "A" util/fake-game-data)))
   (is (= 700000 (company/get-company-value "B" util/fake-game-data)))
