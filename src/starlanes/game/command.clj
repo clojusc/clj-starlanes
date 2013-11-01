@@ -20,7 +20,10 @@
   {:command "save" :alias "" :help "save the current state of the game"}
   {:command "dump" :alias "" :help "display current game state (debugging)"}
   {:command "score" :alias "" :help "show the current score"}
-  {:command "stock" :alias "s" :help "show the current player's assets"}])
+  {:command "stock" :alias "s" :help "show the current player's assets"}
+  {:command "ticker"
+   :alias "t"
+   :help "show current valuations in the stock exchange"}])
 
 (defn get-commands
   ([]

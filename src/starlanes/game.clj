@@ -80,12 +80,7 @@
 (defn tally-scores [game-data]
   (util/display (str \newline
                      "Tallying scores ..." \newline))
-  (finance/display-companies-values game-data)
-  (finance/display-players-earnings game-data)
-  ; XXX get top-score
-  ; XXX determine tie-breaking, if necessary
-  ; XXX display "scoreboard"
-  )
+  (finance/display-endgame-stats game-data))
 
 (defn parse-command
   "Some of the command functions will return new game-data (e.g., 'load-game');
@@ -118,7 +113,9 @@
     (util/in? (game-command/get-commands "stock") command)
       (finance/display-player-earnings
         ((game-move/get-current-player game-data) :name)
-        game-data)))
+        game-data)
+    (util/in? (game-command/get-commands "ticker") command)
+      (finance/display-companies-values game-data)))
 
 (defn process-command
   "For command functions that return 'nil', simply run 'do-player-turn' again

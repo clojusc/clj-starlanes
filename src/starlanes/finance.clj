@@ -32,7 +32,7 @@
     (str \tab company-name ": " share-value " (" shares " shares @ "
          share-price " " const/currency-name "s each)" \newline)))
 
-(defn display-companies-values [game-data]
+(defn -display-companies-values [game-data]
   (util/display
     (str \newline "Company valuations:" \newline \newline))
   (let [companies-letters (util/get-companies-letters game-data)
@@ -40,13 +40,21 @@
     (doseq [[company-keyword total-value] values]
       (let [company-name (util/get-company-name company-keyword)]
         (util/display
-          (str \tab company-name ": " total-value \newline))))))
+          (str \tab company-name ": " total-value \newline)))))
+  nil)
 
-(defn display-player-earnings [player-name game-data]
+(defn display-companies-values [game-data]
   (util/clear-screen)
+  (-display-companies-values)
+  (util/display \newline)
+  (util/display \newline)
+  (util/input const/continue-prompt)
+  nil)
+
+(defn -display-player-earnings [player-name game-data]
   (util/display
     (str "Here is your balance for cash-on-hand:" \newline \newline
-         (get-player-cash player-name game-data) \newline))
+         \tab (get-player-cash player-name game-data) \newline))
   (let [shares (stock/get-named-shares player-name game-data)]
     (util/display
       (str \newline "Here are your current earnings: " \newline \newline))
@@ -55,14 +63,33 @@
                           (str (first company-name)) game-data)
             value (* share share-price)]
         (display-company-data company-name share share-price value)))
-    (display-companies-values game-data)
-    (util/display \newline)
-    (util/display \newline)
-    (util/input const/continue-prompt)
     nil))
 
+(defn display-player-earnings [player-name game-data]
+  (util/clear-screen)
+  (-display-player-earnings player-name game-data)
+  (-display-companies-values game-data)
+  (util/display \newline)
+  (util/display \newline)
+  (util/input const/continue-prompt)
+  nil)
+
+(defn -display-players-earnings [game-data]
+  nil)
+
 (defn display-players-earnings [game-data]
-  )
+  nil)
+
+(defn display-endgame-stats [game-data]
+  (util/clear-screen)
+  (-display-players-earnings game-data)
+  (-display-companies-values game-data)
+  (util/display \newline)
+  (util/display \newline)
+  ; XXX get top-score
+  ; XXX determine tie-breaking, if necessary
+  ; XXX display "scoreboard"
+  nil)
 
 (defn get-dividends [player-name game-data]
   (let [shares (stock/get-player-shares-with-companies player-name game-data)
