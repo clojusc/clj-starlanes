@@ -82,7 +82,7 @@
   (update-in
     game-data
     [:stock-exchange (keyword company-letter) player-name :shares]
-    + new-shares))
+    (fnil + 0) new-shares))
 
 (defn compute-stock-value [{stock :stock value :value}]
   (* stock value))
@@ -98,20 +98,4 @@
     (apply compute-value assets))
   ([cash stocks-data]
     (+ cash (compute-stocks-value stocks-data))))
-
-(defn remove-company [company-keyword game-data]
-  (conj
-    game-data
-    {:stock-exchange (dissoc
-                       (get-stock-exchange game-data)
-                       company-keyword)}))
-
-(defn remove-companies [companies-keywords game-data]
-  (conj
-    game-data
-    {:stock-exchange (apply
-                       dissoc
-                       (get-stock-exchange game-data)
-                       companies-keywords)}))
-
 
