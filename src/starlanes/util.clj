@@ -4,9 +4,15 @@
             [starlanes.const :as const]))
 
 
+(def fake-star-map
+  {:a1 "*", :a2 ".", :a3 "B", :a4 ".", :a5 "C",
+   :b1 ".", :b2 ".", :b3 "B", :b4 ".", :b5 ".",
+   :c1 ".", :c2 ".", :c3 "*", :c4 ".", :c5 "+",
+   :d1 "A", :d2 "*", :d3 ".", :d4 ".", :d5 ".",
+   :e1 "A", :e2 "A", :e3 ".", :e4 "*", :e5 "."})
+
 (def fake-bank-data
   {"Alice" {:cash 200}
-
    "Bob" {:cash 260}
    "Carol" {:cash 570}})
 
@@ -22,12 +28,7 @@
      "Carol" {:shares 100}}})
 
 (def fake-game-data
-  {:star-map
-    {:a1 "*", :a2 ".", :a3 "B", :a4 ".", :a5 "C",
-     :b1 ".", :b2 ".", :b3 "B", :b4 ".", :b5 ".",
-     :c1 ".", :c2 ".", :c3 "*", :c4 ".", :c5 "+",
-     :d1 "A", :d2 "*", :d3 ".", :d4 ".", :d5 ".",
-     :e1 "A", :e2 "A", :e3 ".", :e4 "*", :e5 "."},
+  {:star-map fake-star-map,
    :total-moves 0,
    :players [
     {:name "Alice"},
