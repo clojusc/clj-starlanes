@@ -31,11 +31,15 @@
 
 (defn get-player-shares
   ""
-  [company-letter player-name game-data]
+  ([player-name game-data]
+   (map
+    #(get-player-shares % player-name game-data)
+    (util/get-companies-letters)))
+  ([company-letter player-name game-data]
   (get-in
     game-data
     [:stock-exchange (keyword company-letter) player-name :shares]
-    0))
+    0)))
 
 (defn get-player-shares-with-company [company-letter player-name game-data]
   [(keyword company-letter)
