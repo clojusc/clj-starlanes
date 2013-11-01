@@ -41,6 +41,15 @@
     (is (= [{:name "Be"}] (game-data :companies)))
     (is (= ["Al" "Ca" "De" "Er"] (game-data :companies-queue)))))
 
+(deftest test-remove-companies
+  (let [game-data {:companies [{:name "Al"}
+                               {:name "Be"}
+                               {:name "Ca"}]
+                   :companies-queue ["De" "Er"]}
+        game-data (company/remove-companies ["Al" "Ca"] game-data)]
+    (is (= [{:name "Be"}] (game-data :companies)))
+    (is (= ["Al" "Ca" "De" "Er"] (game-data :companies-queue)))))
+
 (deftest test-get-companies-base-counts
   (let [counts (company/get-companies-base-counts util/fake-game-data)]
     (is (= {"A" 3, "C" 1, "B" 2} counts))

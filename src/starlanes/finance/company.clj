@@ -41,6 +41,16 @@
         companies (filter-company company-name (game-data :companies))]
     (conj game-data {:companies companies :companies-queue companies-queue})))
 
+(defn remove-companies [companies-names game-data]
+  (let [company-name (first companies-names)
+        remaining (rest companies-names)]
+    (cond
+      (not (nil? company-name))
+        (remove-companies
+          remaining
+          (remove-company company-name game-data))
+      :else game-data)))
+
 (defn announce-new-company [company-name]
   (util/beep)
   (util/display
@@ -237,7 +247,9 @@
   (let [distinct-companies (distinct (map second companies-coords))
         winner (get-greatest-company distinct-companies game-data)
         losers (get-losers winner distinct-companies)
-        game-data (set-new-owners losers winner game-data)]
+        game-data (remove-companies
+                    (map util/get-company-name losers)
+                    game-data)]
     ; XXX recalculate value of winning company, with map updated
     ; XXX if the stock is over the threshold, perform a split
     (game-map/update-coords keyword-coord winner game-data)))
