@@ -153,6 +153,13 @@
       (* const/share-modifier-star star-count)
       (* const/share-modifier-base base-count))))
 
+(defn get-share-values
+  ""
+  [game-data]
+  (map
+    #(get-share-value % game-data)
+    (util/get-companies-letters)))
+
 (defn get-company-value
   "Things that affect company value:
     * total number of shares held by all players

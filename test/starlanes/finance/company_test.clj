@@ -79,6 +79,9 @@
   (is (= 700 (company/get-share-value "B" util/fake-game-data)))
   (is (= 100 (company/get-share-value "C" util/fake-game-data))))
 
+(deftest test-get-share-values
+  (is (= [1800 700 100 0 0] (company/get-share-values util/fake-game-data))))
+
 (deftest test-get-company-value
   (is (= 2880000 (company/get-company-value "A" util/fake-game-data)))
   (is (= 700000 (company/get-company-value "B" util/fake-game-data)))
