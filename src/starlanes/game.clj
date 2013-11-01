@@ -188,4 +188,4 @@
       (validate-move game-data
                      available-moves
                      (string/lower-case
-                       (get-player-move)))))
+                       (get-player-move))))))
