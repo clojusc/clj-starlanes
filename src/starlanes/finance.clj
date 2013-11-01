@@ -18,6 +18,15 @@
 (defn get-bank [game-data]
   (game-data :bank))
 
+(defn get-player-cash [player-name game-data]
+  (get-in game-data [:bank player-name :cash]))
+
+(defn add-player-cash [player-name amount game-data]
+  (update-in game-data [:bank player-name :cash] + amount))
+
+(defn remove-player-cash [player-name amount game-data]
+  (update-in game-data [:bank player-name :cash] - amount))
+
 (defn display-company-data [company-name shares share-price share-value]
   (util/display
     (str \tab company-name ": " share-value " (" shares " shares @ "
@@ -36,7 +45,7 @@
 (defn display-player-earnings [player-name game-data]
   (util/display
     (str "Here is your balance for cash-on-hand:" \newline \newline
-         (player/get-cash player-name) \newline))
+         (get-player-cash player-name) \newline))
   (let [shares (stock/get-named-shares player-name game-data)]
     (util/display
       (str \newline "Here are your current earnings: " \newline \newline))
