@@ -105,23 +105,21 @@
          (stock/get-players-shares ["A" "B" "C"] util/fake-game-data))))
 
 (deftest test-add-player-shares
-  (is (= 1000 (stock/get-player-shares "A" "Alice" util/fake-game-data)))
+  (is (= 100 (stock/get-player-shares "A" "Carol" util/fake-game-data)))
   (let [game-data (stock/add-player-shares
-                    "A" "Alice" 1000 util/fake-game-data)]
-    (is (= 2000 (stock/get-player-shares "A" "Alice" game-data)))))
+                    "A" "Carol" 1000 util/fake-game-data)]
+    (is (= 1100 (stock/get-player-shares "A" "Carol" game-data))))
+  (is (= 0 (stock/get-player-shares "B" "Alice" util/fake-game-data)))
+  (let [game-data (stock/add-player-shares
+                    "B" "Alice" 500 util/fake-game-data)]
+    (is (= 500 (stock/get-player-shares "B" "Alice" game-data)))))
 
 (deftest test-compute-value
   (let [assets [1000 [{:stock 12 :value 23.50} {:stock 100 :value 50}]]]
     (is (= 6282.0 (stock/compute-value assets)))
     (is (= 6282.0 (stock/compute-value (first assets) (second assets))))))
 
-(deftest test-remove-company
-  (is (= {:C {"Carol" {:shares 100}, "Bob" {:shares 500}}
-          :B {"Carol" {:shares 1000}}}
-         ((stock/remove-company :A util/fake-game-data) :stock-exchange))))
 
-(deftest test-remove-company
-  (is (= {:B {"Carol" {:shares 1000}}}
-         ((stock/remove-companies
-            [:A :C]
-            util/fake-game-data) :stock-exchange))))
+
+
+
