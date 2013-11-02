@@ -158,16 +158,25 @@
   [game-data]
   (map
     #(get-share-value % game-data)
-    (util/get-companies-letters)))
+    (util/get-companies-letters game-data)))
 
 (defn get-share-values-with-company
   ""
   [game-data]
   (map
     #(vector
+      (get-share-value % game-data)
+      %)
+    (util/get-companies-letters game-data)))
+
+(defn get-share-values-with-company-names
+  ""
+  [game-data]
+  (map
+    #(vector
       (util/get-company-name (keyword %))
       (get-share-value % game-data))
-    (util/get-companies-letters)))
+    (util/get-companies-letters game-data)))
 
 (defn get-company-value
   "Things that affect company value:
@@ -187,7 +196,7 @@
   "For each company in the game, get its value and return a hash map with this
   data."
   ([game-data]
-   (get-companies-values (util/get-companies-letters) game-data))
+   (get-companies-values (util/get-companies-letters game-data) game-data))
   ([companies-letters game-data]
     (into
       {}
@@ -223,6 +232,10 @@
                 (if
                   (= val (ffirst sorted)) [key val]))
               sorted)))))))
+
+(defn get-cheapest-company []
+  ""
+  )
 
 (defn get-losers
   ""
