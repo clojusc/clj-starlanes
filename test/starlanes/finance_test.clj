@@ -12,12 +12,12 @@
   (is (= util/fake-bank-data (finance/get-bank util/fake-game-data))))
 
 (deftest test-player-get-cash
-  (is (= 200 (finance/get-player-cash "Alice" util/fake-game-data)))
-  (is (= 260 (finance/get-player-cash "Bob" util/fake-game-data)))
+  (is (= 50 (finance/get-player-cash "Alice" util/fake-game-data)))
+  (is (= 100 (finance/get-player-cash "Bob" util/fake-game-data)))
   (is (= 570 (finance/get-player-cash "Carol" util/fake-game-data))))
 
 (deftest test-player-add-cash
-  (is (= 210
+  (is (= 60
          (finance/get-player-cash
            "Alice"
            (finance/add-player-cash "Alice" 10 util/fake-game-data)))))
@@ -35,3 +35,12 @@
          (finance/get-dividends "Bob" util/fake-game-data)))
   (is (= 890.0
          (finance/get-dividends "Carol" util/fake-game-data))))
+
+(deftest test-affordable?
+  ; XXX add test with with-redefs on get-current-player
+  (is (= false (finance/affordable? "Alice" util/fake-game-data)))
+  (is (= true (finance/affordable? "Bob" util/fake-game-data)))
+  (is (= true (finance/affordable? "Carol" util/fake-game-data)))
+  ; XXX add test with cash values as added parameter
+  ; XXX add test with company letters as added parameter
+  )
