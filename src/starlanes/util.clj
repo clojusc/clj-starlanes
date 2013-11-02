@@ -12,8 +12,8 @@
    :e1 "A", :e2 "A", :e3 ".", :e4 "*", :e5 "."})
 
 (def fake-bank-data
-  {"Alice" {:cash 200}
-   "Bob" {:cash 260}
+  {"Alice" {:cash 50}
+   "Bob" {:cash 100}
    "Carol" {:cash 570}})
 
 (def fake-exchange-data
