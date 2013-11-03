@@ -19,7 +19,7 @@
   (game-data :bank))
 
 (defn get-player-cash [player-name game-data]
-  (get-in game-data [:bank player-name :cash]))
+  (get-in game-data [:bank player-name :cash] 0))
 
 (defn add-player-cash [player-name amount game-data]
   (update-in game-data [:bank player-name :cash] + amount))
@@ -113,10 +113,12 @@
   ([player-name game-data]
    (affordable? (get-player-cash player-name game-data) player-name game-data))
   ([cash player-name game-data]
-    ; XXX the following is not optimal; find a faster and clearner way
-    (let [company-letter (second (first
-      (sort
-        (company/get-share-values-with-company game-data))))]
+   ; XXX the following is not optimal; find a faster and clearner way
+   (let [company-letter (second
+                          (first
+                            (sort
+                              (company/get-share-values-with-company
+                                game-data))))]
       (affordable? company-letter cash player-name game-data)))
   ([company-letter cash player-name game-data]
    (let [share-value (company/get-share-value company-letter game-data)]
@@ -124,31 +126,37 @@
        (<= share-value cash) true
        :else false))))
 
-(defn display-stock-purchase [company-letter game-data]
-  ; display intro/heading
+(defn display-stock-purchase-option [company-letter game-data]
+  (util/clear-screen)
+  (util/display (str "Stock Exchange" \newline \newline))
   ; display prompt with current cash and company/share info
   ; check to see if there are enough funds
   ; ensure aount is positive
   ; make purchase - update stock exchange, update bank
-  ; return new game data
-  )
+  (util/input const/continue-prompt)
+  game-data)
 
-(defn display-stock-purchasing-options [companies-letters game-data]
-  (let [company-letter (first companies-letters)
-        remaining (rest companies-letters)]
-    (cond
-      (not (nil? company-letter))
-        (display-stock-purchasing-options
-          remaining
-          (display-stock-purchase company-letter game-data))
-      :else game-data)))
+(defn display-stock-purchase-options
+  ([game-data]
+    (display-stock-purchase-options
+      (util/get-companies-letters game-data)
+      game-data))
+  ([companies-letters game-data]
+    (let [company-letter (first companies-letters)
+          remaining (rest companies-letters)]
+      (cond
+        (not (nil? company-letter))
+          (display-stock-purchase-options
+            remaining
+            (display-stock-purchase-option company-letter game-data))
+        :else game-data))))
 
 (defn let-player-purchase-stocks [game-data]
-  (let [player-name (game-move/get-current-player)
+  (let [player-name (game-move/get-current-player game-data)
         shares-data (company/get-share-values game-data)]
   (cond
     (affordable? player-name game-data)
-      (display-stock-purchasing-options game-data)
+      (display-stock-purchase-options game-data)
     :else game-data)))
 
 
