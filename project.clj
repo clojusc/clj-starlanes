@@ -14,7 +14,7 @@
   :profiles {
     :dev {
       :dependencies [[org.clojure/tools.namespace "0.2.3"]
-                 [org.clojure/java.classpath "0.2.0"]]}
+                     [org.clojure/java.classpath "0.2.0"]]}
     :testing {
       :dependencies [[clj-http-fake "0.4.1"]
                      [leiningen "2.3.3"]]}})
