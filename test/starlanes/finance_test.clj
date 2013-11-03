@@ -61,4 +61,18 @@
     (is (= false (finance/affordable? "B" 200 "Alice" util/fake-game-data)))
     (is (= false (finance/affordable? "B" 500 "Alice" util/fake-game-data)))
     (is (= true (finance/affordable? "B" 700 "Alice" util/fake-game-data)))
-    (is (= true (finance/affordable? "C" 100 "Alice" util/fake-game-data)))))
+    (is (= true (finance/affordable? "C" 100 "Alice" util/fake-game-data))))
+  (testing "Let's take a look at some edge-cases"
+    (is (= true (finance/affordable? "" 100 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? nil 100 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? "A" 0 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? "" 0 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? nil 0 "Alice" util/fake-game-data)))
+    (let [fake-game-data {:companies []
+                           :players [{:name "Alice"}]
+                           :stock-exchange  {:A {"Alice" {}}}}]
+      (is (= true (finance/affordable? "" 100 "Alice" fake-game-data)))
+      (is (= true (finance/affordable? nil 100 "Alice" fake-game-data)))
+      (is (= true (finance/affordable? "A" 0 "Alice" fake-game-data)))
+      (is (= true (finance/affordable? "" 0 "Alice" fake-game-data)))
+      (is (= true (finance/affordable? nil 0 "Alice" fake-game-data))))))
