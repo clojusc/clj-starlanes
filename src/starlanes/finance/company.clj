@@ -144,7 +144,7 @@
       0
       star-count)))
 
-(defn get-share-value
+(defn -get-share-value
   ""
   [company-letter game-data]
   (let [star-count (get-company-star-count company-letter game-data)
@@ -152,6 +152,14 @@
     (+
       (* const/share-modifier-star star-count)
       (* const/share-modifier-base base-count))))
+
+(defn get-share-value
+  ""
+  [company-letter game-data]
+  (cond
+    (empty? company-letter)
+      0
+    :else (-get-share-value company-letter game-data)))
 
 (defn get-share-values
   ""
