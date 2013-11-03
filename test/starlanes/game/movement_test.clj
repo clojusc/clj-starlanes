@@ -3,9 +3,22 @@
             [starlanes.game.movement :as game]
             [starlanes.util :as util]))
 
+(def initial-game-state
+  {:total-moves 0
+   :players [{:name "Alice"}]
+   :player-order [0]})
 
 (deftest test-get-remaining-moves
   (is (= 14 (game/get-remaining-moves util/fake-game-data))))
+
+(deftest test-get-current-move-index
+  (is (= 0 (game/get-current-move-index initial-game-state))))
+
+(deftest test-get-current-player-index
+  (is (= 0 (game/get-current-player-index initial-game-state))))
+
+(deftest test-get-current-player
+  (is (= {:name "Alice"} (game/get-current-player initial-game-state))))
 
 (deftest test-moves-remain-many
   (is (= 14 (game/-moves-remain? util/fake-game-data))))

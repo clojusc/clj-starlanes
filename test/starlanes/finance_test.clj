@@ -12,10 +12,21 @@
 (deftest test-get-bank
   (is (= util/fake-bank-data (finance/get-bank util/fake-game-data))))
 
-(deftest test-player-get-cash
+(deftest test-get-player-cash
   (is (= 50 (finance/get-player-cash "Alice" util/fake-game-data)))
   (is (= 100 (finance/get-player-cash "Bob" util/fake-game-data)))
-  (is (= 570 (finance/get-player-cash "Carol" util/fake-game-data))))
+  (is (= 570 (finance/get-player-cash "Carol" util/fake-game-data)))
+  (testing "Edge cases!"
+    (is (= 0 (finance/get-player-cash "Zeev" util/fake-game-data)))
+    (is (= 0 (finance/get-player-cash "" util/fake-game-data)))
+    (is (= 0 (finance/get-player-cash nil util/fake-game-data)))
+    (let [fake-game-data {:companies []
+                          :players [{:name "Alice"}]
+                          :bank {"Alice" {:cash 0.0}}}]
+      (is (= 0.0 (finance/get-player-cash "Alice" fake-game-data))))
+    (let [fake-game-data {}]
+      (is (= 0 (finance/get-player-cash "Alice" fake-game-data))))
+    ))
 
 (deftest test-player-add-cash
   (is (= 60
