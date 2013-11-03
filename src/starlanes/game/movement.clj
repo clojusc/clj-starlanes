@@ -78,6 +78,7 @@
           (const/items :outpost)
           game-data))))
 
+; XXX rename to -how-many-moves-remain? or -get-remaining-moves
 (defn -moves-remain?
   ([game-data]
     (-moves-remain?
