@@ -1,6 +1,7 @@
 (ns starlanes.finance-test
   (:require [clojure.test :refer :all]
             [starlanes.finance :as finance]
+            [starlanes.game.movement :as game-move]
             [starlanes.util :as util]))
 
 
@@ -37,10 +38,27 @@
          (finance/get-dividends "Carol" util/fake-game-data))))
 
 (deftest test-affordable?
-  ; XXX add test with with-redefs on get-current-player
-  (is (= false (finance/affordable? "Alice" util/fake-game-data)))
-  (is (= true (finance/affordable? "Bob" util/fake-game-data)))
-  (is (= true (finance/affordable? "Carol" util/fake-game-data)))
-  ; XXX add test with cash values as added parameter
-  ; XXX add test with company letters as added parameter
-  )
+  (testing "Test the single-parameter option"
+    (with-redefs [game-move/get-current-player (fn [x] {:name "Alice"})]
+      (is (= false (finance/affordable? util/fake-game-data))))
+    (with-redefs [game-move/get-current-player (fn [x] {:name "Carol"})]
+      (is (= true (finance/affordable? util/fake-game-data)))))
+  (testing "Test the double-parameter option"
+    (is (= false (finance/affordable? "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? "Bob" util/fake-game-data)))
+    (is (= true (finance/affordable? "Carol" util/fake-game-data))))
+  (testing "Test with cash passed as a parameter"
+    (is (= false (finance/affordable? 0 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? 99 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? 100 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? 1000 "Alice" util/fake-game-data))))
+  (testing "Test with cash passed as a parameter"
+    (is (= false (finance/affordable? "A" 100 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? "A" 500 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? "A" 1000 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? "A" 1800 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? "B" 100 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? "B" 200 "Alice" util/fake-game-data)))
+    (is (= false (finance/affordable? "B" 500 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? "B" 700 "Alice" util/fake-game-data)))
+    (is (= true (finance/affordable? "C" 100 "Alice" util/fake-game-data)))))
