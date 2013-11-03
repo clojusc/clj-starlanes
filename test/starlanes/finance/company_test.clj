@@ -77,7 +77,10 @@
 (deftest test-get-share-value
   (is (= 1800 (company/get-share-value "A" util/fake-game-data)))
   (is (= 700 (company/get-share-value "B" util/fake-game-data)))
-  (is (= 100 (company/get-share-value "C" util/fake-game-data))))
+  (is (= 100 (company/get-share-value "C" util/fake-game-data)))
+  (is (= 0 (company/get-share-value "Z" util/fake-game-data)))
+  (is (= 0 (company/get-share-value "" util/fake-game-data)))
+  (is (= 0 (company/get-share-value nil util/fake-game-data))))
 
 (deftest test-get-share-values
   (is (= [1800 700 100] (company/get-share-values util/fake-game-data))))
