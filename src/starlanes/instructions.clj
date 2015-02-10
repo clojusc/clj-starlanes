@@ -112,7 +112,7 @@ the survivor is randomly determined).  The stock of the
 surviving company is increased in value according to
 the number of spaces and stars added to its lane.  Each
 player's stock in the defunct company is exchanged for
-shares kn the survivor on a ratio of 2 for 1.  Also,
+shares in the survivor on a ratio of 2 for 1.  Also,
 each player is paid a cash bonus proportional to the
 percentage of outstanding stock they held in the defunct
 company.
@@ -126,7 +126,7 @@ and if -- a new company is established.
    Next the computer adds stock dividends to the player's
 cash on hand (5% of the market value of the stock in
 their possession), and offers them the opportunity to
-purchase stock kn any of the active companies on the board.
+purchase stock in any of the active companies on the board.
 Stock may not be sold, but the market value of each
 player's stock is taken into account at the end of the game
 to determine the winner. If the market value of a given
