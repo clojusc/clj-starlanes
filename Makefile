@@ -45,13 +45,13 @@ run-jar-standalone: build
 	java -jar $(STANDALONE_JAR)
 
 kibit-only:
-	@lein with-profile testing kibit
+	-@lein with-profile testing kibit
 
 test-only:
 	@lein with-profile testing test
 
 coverage-only:
-	@lein with-profile testing cloverage --text --html
+	-@lein with-profile testing cloverage --text --html
 	@cat target/coverage/coverage.txt
 	@echo "body {background-color: #000; color: #fff;} \
 	a {color: #A5C0F0;}" >> target/coverage/coverage.css
