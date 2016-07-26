@@ -1,11 +1,12 @@
-(defproject starlanes "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject starlanes "0.2.0-SNAPSHOT"
+  :description "A Nostalgic Reimplementation of the old Star Lanes BASIC Game"
+  :url "http://github.com/clojusc/clj-starlanes"
   :license {:name "BSD"
             :url "http://opensource.org/licenses/BSD-3-Clause"}
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/math.combinatorics "0.0.4"]]
-  :plugins [[lein-exec "0.3.1"]]
+  :plugins [[lein-exec "0.3.1"]
+            [lein-kibit "0.1.2"]]
   :aot [starlanes.trader]
   :main starlanes.trader
   :test-selectors {:default (complement :integration)
