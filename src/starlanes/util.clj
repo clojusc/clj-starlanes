@@ -168,11 +168,9 @@
   [sequence item]
   (if (empty? sequence)
     false
-    (reduce
-      #(or %1 %2)
-      (map
-        #(= %1 item)
-        sequence))))
+    (->> sequence
+         (map #(= %1 item))
+         (reduce #(or %1 %2)))))
 
 (defn x-coord? [x-coord]
   (in? (get-x-coord-range) x-coord))
