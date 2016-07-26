@@ -87,6 +87,11 @@ $ make run-jar-standalone
 Enjoy!
 
 
+## License [&#x219F;](#contents)
+
+In honor of the old BSD games, this codebase is licensed under the BSD 3-clause license.
+
+
 <!-- Named page links below: /-->
 
 [travis]: https://travis-ci.org/clojusc/clj-starlanes
