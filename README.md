@@ -28,8 +28,8 @@ gathered when researching the game's origins).
 
 Over the years, it was copied and then heavily modified, morphing into what
 became *Star Lanes* by the late 70s and early 80s. (Note that some *Star Lanes*
-versions of the game still used the ``TRADE.BAS`` filename, while others
-switched to ``LANES.BAS``.)
+versions of the game still used the `TRADE.BAS` filename, while others
+switched to `LANES.BAS`.)
 
 The *Star Trader* lineage of games inspired a list of excellent games; the
 [Wikipedia article](https://en.wikipedia.org/wiki/Star_Trader) even claims
@@ -67,7 +67,7 @@ and greater number of companies (both configurable).
 
 ## Dependencies [&#x219F;](#contents)
 
-You will need to have Java, Clojure, and `Leiningen`_ installed. `lein` will
+You will need to have Java, Clojure, and Leiningen installed. `lein` will
 need to be in your `$PATH`. Also, note that running most of the `make` targets
 for the first time will download all the dependencies automatically, so you will
 see lots of text scrolling in your terminal while it does so.
