@@ -102,7 +102,7 @@ In honor of the old BSD games, this codebase is licensed under the BSD 3-clause 
 [deps-badge]: http://jarkeeper.com/clojusc/clj-starlanes/status.svg
 [starlanes-logo]: https://raw.githubusercontent.com/clojusc/clj-starlanes/master/resources/screeshots/hy-early-stage-game-400.png
 [starlanes-logo-large]: https://raw.githubusercontent.com/clojusc/clj-starlanes/master/resources/screeshots/hy-early-stage-game-400.png
-[clojars]: https://clojars.org/starlanes/starlanes
-[clojars-badge]: https://img.shields.io/clojars/v/starlanes/clj-starlanes.svg
+[clojars]: https://clojars.org/starlanes
+[clojars-badge]: https://img.shields.io/clojars/v/starlanes.svg
 [tag-badge]: https://img.shields.io/github/tag/clojusc/clj-starlanes.svg?maxAge=2592000
 [tag]: https://github.com/clojusc/clj-starlanes/tags
