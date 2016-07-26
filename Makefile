@@ -45,10 +45,10 @@ run-jar-standalone: build
 	java -jar $(STANDALONE_JAR)
 
 kibit-only:
-	-@lein with-profile testing kibit
+	-@lein kibit
 
 test-only:
-	@lein with-profile testing test
+	@lein all test
 
 coverage-only:
 	-@lein with-profile testing cloverage --text --html
