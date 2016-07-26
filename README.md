@@ -43,7 +43,7 @@ outlined below.
 
 ### Star Trader [&#x219F;](#contents)
 
-[![][resources/screeshots/BASIC-star-trader-map-400.png]]
+![](resources/screeshots/BASIC-star-trader-map-400.png)
 
 In *Star Trader*, players travel about the star map buying and selling six types
 of merchandise: uranium, metals, gems, software, heavy equipment, and medicine.
@@ -51,7 +51,7 @@ of merchandise: uranium, metals, gems, software, heavy equipment, and medicine.
 
 ### Star Lanes [&#x219F;](#contents)
 
-[![][resources/screeshots/BASIC-star-lanes-map-400.png]]
+![](resources/screeshots/BASIC-star-lanes-map-400.png)
 
 In *Star Lanes*, players take turns building outposts, creating companies, and
 purchasing stock.
@@ -100,8 +100,8 @@ In honor of the old BSD games, this codebase is licensed under the BSD 3-clause 
 [travis-badge]: https://travis-ci.org/clojusc/clj-starlanes.png?branch=master
 [deps]: http://jarkeeper.com/clojusc/clj-starlanes
 [deps-badge]: http://jarkeeper.com/clojusc/clj-starlanes/status.svg
-[starlanes-logo]: https://raw.githubusercontent.com/clojusc/starlanes-system/master/resources/screeshots/hy-early-stage-game-400.png
-[starlanes-logo-large]: https://raw.githubusercontent.com/clojusc/starlanes-system/master/resources/screeshots/hy-early-stage-game-400.png
+[starlanes-logo]: https://raw.githubusercontent.com/clojusc/clj-starlanes/master/resources/screeshots/hy-early-stage-game-400.png
+[starlanes-logo-large]: https://raw.githubusercontent.com/clojusc/clj-starlanes/master/resources/screeshots/hy-early-stage-game-400.png
 [clojars]: https://clojars.org/starlanes/starlanes
 [clojars-badge]: https://img.shields.io/clojars/v/starlanes/clj-starlanes.svg
 [tag-badge]: https://img.shields.io/github/tag/clojusc/clj-starlanes.svg?maxAge=2592000
