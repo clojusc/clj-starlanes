@@ -291,13 +291,9 @@
 
 (defn merge-companies
   [keyword-coord current-player companies-coords game-data]
-  (util/display (str \newline "Merging companies ..." \newline))
-  (let [game-data (-merge-companies keyword-coord
-                                    current-player
-                                    companies-coords
-                                    game-data)]
-    (util/input const/continue-prompt)
-    game-data))
+  (util/display "\nMerging companies ...\n")
+  (util/input const/continue-prompt)
+  (-merge-companies keyword-coord current-player companies-coords game-data))
 
 (defn expand-company
   ""
