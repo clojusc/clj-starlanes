@@ -29,8 +29,11 @@
          (game-map/get-company-coords util/fake-game-data))))
 
 (deftest test-get-star-coords
-  (is (= [:c3 :e4 :d2 :a1]
-         (game-map/get-star-coords util/fake-game-data))))
+  (is (= [:a1 :c3 :d2 :e4]
+         (-> util/fake-game-data
+             (game-map/get-star-coords)
+             (sort)
+             (into [])))))
 
 (deftest test-get-possible-neighbors
   (is (= [95 96 97] (game-map/get-possible-neighbors 96)))
