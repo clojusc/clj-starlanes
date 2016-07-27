@@ -59,12 +59,12 @@
 (defn setup-game-data
   ""
   []
-  (let [game-init (game-data-factory)
-        game-with-star-map (create-star-map-for-game game-init)
-        game-with-players (set-new-players game-with-star-map)
-        game-with-player-order (player/determine-player-order game-with-players)
-        game-with-bank (set-new-bank game-with-player-order)]
-    (set-new-stock-exchange game-with-bank)))
+  (-> (game-data-factory)
+      (create-star-map-for-game)
+      (set-new-players)
+      (player/determine-player-order)
+      (set-new-bank)
+      (set-new-stock-exchange)))
 
 (defn setup-game [& {:keys [first-time?] :or {first-time? true}}]
   (util/clear-screen)
