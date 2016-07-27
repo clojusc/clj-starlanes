@@ -1,3 +1,10 @@
+(defn get-banner [] (str
+  " ____  _               _\n"
+  "/ ___|| |_ __ _ _ __  | |    __ _ _ __   ___  ___\n"
+  "\\___ \\| __/ _` | '__| | |   / _` | '_ \\ / _ \\/ __|\n"
+  " ___) | || (_| | |    | |__| (_| | | | |  __/\\__ \\\n"
+  "|____/ \\__\\__,_|_|    |_____\\__,_|_| |_|\\___||___/\n"))
+
 (defproject starlanes "0.2.0-SNAPSHOT"
   :description "A Nostalgic Reimplementation of the old Star Lanes BASIC Game"
   :url "http://github.com/clojusc/clj-starlanes"
@@ -9,6 +16,9 @@
             [lein-kibit "0.1.2"]]
   :aot [starlanes.trader]
   :main starlanes.trader
+  :repl-options {
+    :welcome ~(println (get-banner))
+  }
   :test-selectors {:default (complement :integration)
                    :integration :integration
                    :all (constantly true)}
