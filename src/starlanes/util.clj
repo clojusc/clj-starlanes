@@ -147,6 +147,10 @@
     (is-item? coord-data expeted-item-char) coord-data
     :else nil))
 
+(def filter-star #(filter-item % (const/items :star)))
+(def filter-empty #(filter-item % (const/items :empty)))
+(def filter-outpost #(filter-item % (const/items :outpost)))
+
 (defn filter-allowed [all legal]
   (intersection (set all) (set legal)))
 

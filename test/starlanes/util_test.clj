@@ -76,11 +76,14 @@
   (is (= [:a1 "*"] (util/filter-item [:a1 "*"] (const/items :star))))
   (is (= [:a1 "+"] (util/filter-item [:a1 "+"] (const/items :outpost))))
   (is (= nil (util/filter-item [:a1 "+"] (const/items :star))))
-  (is (= [nil nil nil nil nil nil nil nil nil [:c3 "*"]
-          nil nil nil nil [:e4 "*"] nil nil nil [:d2 "*"]
-          nil nil nil [:a1 "*"] nil nil]
-         (map #(util/filter-item % (const/items :star))
-         (util/fake-game-data :star-map)))))
+  (is (= [[:a1 "*"] nil nil nil nil nil nil nil nil nil nil nil
+          [:c3 "*"] nil nil nil
+          [:d2 "*"] nil nil nil nil nil nil
+          [:e4 "*"] nil]
+         (->> (util/fake-game-data :star-map)
+              (sort)
+              (map util/filter-star)
+              (into [])))))
 
 (deftest test-filter-allowed
   (is (= #{2 3 4} (util/filter-allowed [1 2 3 4 5] [2 3 4])))
