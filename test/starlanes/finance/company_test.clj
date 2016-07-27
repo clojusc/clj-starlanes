@@ -196,7 +196,6 @@
     (is (= "B" (star-map :b3)))
     (is (= "A" (star-map :d1)))
     (is (= "A" (star-map :e1)))
-    (is (= "A" (star-map :e2)))
-    ))
+    (is (= "A" (star-map :e2)))))
 
 

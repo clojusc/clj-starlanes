@@ -125,15 +125,14 @@
   "Get all companies that are next to stars and the number of stars they are
   next to."
   [game-data]
-  (let [stars (game-map/get-star-coords game-data)
-        star-neighbors (map
-                         #(game-map/get-neighbor-companies % game-data)
-                         stars)]
-    (util/count-occurances
-      (take-nth 2
-        (rest
-          (flatten
-            (remove empty? star-neighbors)))))))
+  (->> game-data
+       (game-map/get-star-coords)
+       (map #(game-map/get-neighbor-companies % game-data))
+       (remove empty?)
+       (flatten)
+       (rest)
+       (take-nth 2)
+       (util/count-occurances)))
 
 (defn get-company-star-count
   "For the commpany letter passed, count the number of company bases that are
@@ -206,11 +205,9 @@
   ([game-data]
    (get-companies-values (util/get-companies-letters game-data) game-data))
   ([companies-letters game-data]
-    (into
-      {}
-      (map
-        (fn [x] {(keyword x) (get-company-value x game-data)})
-        companies-letters))))
+    (->> companies-letters
+         (map (fn [x] {(keyword x) (get-company-value x game-data)}))
+         (into {}))))
 
 (defn get-filtered-companies
   "Get the company data from the game state for just the companies whose first-
@@ -220,26 +217,27 @@
     (fn [x] (util/in? companies-letters (second x)))
     (game-map/get-companies-data game-data)))
 
+(defn get-sorted-companies-values
+  ""
+  [companies-letters game-data]
+  (->> game-data
+       (get-companies-values companies-letters)
+       (map (fn [x] [(val x) (key x)]))
+       (sort)
+       (reverse)))
+
 (defn get-greatest-company
   "Get all company values, and identify those with the greatest value. In the
   event of a tie, randomly select from the top-valued companies."
   [companies-letters game-data]
-  (let [data (get-companies-values companies-letters game-data)
-        sorted (reverse
-                 (sort
-                   (map
-                     (fn [x] [(val x) (key x)])
-                     data)))]
-    (name
-      (first
-        (rand-nth
-          (remove
-            empty?
-            (map
-              (fn [[val key]]
-                (if
-                  (= val (ffirst sorted)) [key val]))
-              sorted)))))))
+  (let [sorted (get-sorted-companies-values companies-letters game-data)]
+    (->> sorted
+         (map (fn [[val key]]
+                (if (= val (ffirst sorted)) [key val])))
+         (remove empty?)
+         (rand-nth)
+         (first)
+         (name))))
 
 (defn get-cheapest-company []
   ""
@@ -283,13 +281,13 @@
   [keyword-coord current-player companies-coords game-data]
   (let [distinct-companies (distinct (map second companies-coords))
         winner (get-greatest-company distinct-companies game-data)
-        losers (get-losers winner distinct-companies)
-        game-data (remove-companies
-                    (map util/get-company-name losers)
-                    game-data)]
+        losers (get-losers winner distinct-companies)]
     ; XXX recalculate value of winning company, with map updated
     ; XXX if the stock is over the threshold, perform a split
-    (game-map/update-coords keyword-coord winner game-data)))
+    (->> game-data
+         (remove-companies
+           (map util/get-company-name losers))
+         (game-map/update-coords keyword-coord winner))))
 
 (defn merge-companies
   [keyword-coord current-player companies-coords game-data]
@@ -309,7 +307,7 @@
                                     keyword-coord game-data))]
     ; XXX this is an insufficient final solution; see the following issue for
     ; more details:
-    ;   https://github.com/oubiwann/clj-starlanes/issues/6
+    ;   https://github.com/clojusc/clj-starlanes/issues/6
     ; we're going to want to create a function that takes a list of neighbor
     ; outposts, converts them to the company, and then recurses on all those
     ; outposts' neighbors that are outposts, performing the same action
