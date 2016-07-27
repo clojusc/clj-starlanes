@@ -29,8 +29,11 @@ build: clean
 	@lein compile
 	@lein uberjar
 
-shell:
+repl:
 	@lein repl
+
+repl-debug:
+	@lein with-profile +debug repl
 
 dev:
 	@lein run --development

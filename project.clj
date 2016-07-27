@@ -31,5 +31,12 @@
       :dependencies [[org.clojure/tools.namespace "0.2.10"]
                      [org.clojure/java.classpath "0.2.3"]
                      [clj-http-fake "1.0.2"]
-                     [leiningen "2.6.1"]]}}
+                     [leiningen "2.6.1"]]}
+    :debug {
+      :dependencies [[org.clojure/clojure "1.8.0"]]
+      :source-paths ["dev-resources/src"]
+      :repl-options {
+        :init-ns starlanes.debug
+      }
+      }}
   :aliases {"all" ["with-profile" "dev:dev,1.5:dev,1.6:dev,1.7:dev,1.8:dev"]})
