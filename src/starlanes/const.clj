@@ -1,6 +1,5 @@
 (ns starlanes.const)
 
-
 (def debug true)
 
 (def game-title "Star Traders")
