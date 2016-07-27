@@ -81,7 +81,7 @@ almost word-for-word).
 The easiest way to play the game is simply this:
 
 ```
-$ git clone https://github.com/oubiwann/clj-starlanes.git
+$ git clone https://github.com/clojusc/clj-starlanes.git
 $ cd clj-starlanes
 $ make run-jar-standalone
 ```
