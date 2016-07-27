@@ -39,4 +39,4 @@
         :init-ns starlanes.debug
       }
       }}
-  :aliases {"all" ["with-profile" "dev:dev,1.5:dev,1.6:dev,1.7:dev,1.8:dev"]})
+  :aliases {"all" ["with-profile" "1.5:1.6:1.7:1.8"]})
