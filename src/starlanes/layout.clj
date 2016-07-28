@@ -60,9 +60,10 @@
        (const/item-colors)
        (util/colorize item)))
 
-(defn get-row-string [row-data]
+(defn get-row-string
   "'row-data' contains a list of keys (keywords) and values. To get the string
   content for the row, the values need to be extracted."
+  [row-data]
   (->> row-data
        (map (comp colorize-item second))
        (string/join grid-space)))

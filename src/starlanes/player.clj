@@ -1,10 +1,10 @@
 (ns starlanes.player
   (:require [starlanes.util :as util]))
 
-
-(defn player-data-factory []
+(defn player-data-factory
   "Elements of stock will be maps, each having an entry for the company name
   and the number of shares held for that company."
+  []
   {:name ""})
 
 (defn create-new-player [index]

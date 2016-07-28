@@ -45,7 +45,7 @@
 
 (defn display-companies-values [game-data]
   (util/clear-screen)
-  (-display-companies-values)
+  (-display-companies-values game-data)
   (util/display \newline)
   (util/display \newline)
   (util/input const/continue-prompt)
