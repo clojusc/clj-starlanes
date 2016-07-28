@@ -83,7 +83,7 @@ The easiest way to play the game is simply this:
 ```
 $ git clone https://github.com/clojusc/clj-starlanes.git
 $ cd clj-starlanes
-$ make run-jar-standalone
+$ make run
 ```
 
 Enjoy!
