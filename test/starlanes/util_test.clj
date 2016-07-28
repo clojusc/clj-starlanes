@@ -167,26 +167,26 @@
   (is (= false (util/outpost? "A"))))
 
 (deftest test-get-color-tuple
-  (is (= "0;32;40" (util/get-color-tuple :green :black :dark)))
+  (is (= "0;32" (util/get-color-tuple :green :black :dark)))
   const/end-color
-  (is (= "1;32;40" (util/get-color-tuple :green :black :light)))
+  (is (= "1;32" (util/get-color-tuple :green :black :light)))
   const/end-color
-  (is (= "0;30;42" (util/get-color-tuple :black :green :dark)))
+  (is (= "0;30" (util/get-color-tuple :black :green :dark)))
   const/end-color)
 
 (deftest test-start-color
-  (is (= "\33[0;32;40m" (util/start-color :green :black :dark)))
+  (is (= "\33[0;32m" (util/start-color :green :black :dark)))
   const/end-color
-  (is (= "\33[1;32;40m" (util/start-color :green :black :light)))
+  (is (= "\33[1;32m" (util/start-color :green :black :light)))
   const/end-color
-  (is (= "\33[0;30;42m" (util/start-color :black :green :dark)))
+  (is (= "\33[0;30m" (util/start-color :black :green :dark)))
   const/end-color)
 
 (deftest test-colorize
-  (is (= "\33[1;37;40mSpace!\33[m" (util/colorize "Space!")))
-  (is (= "\33[0;30;40mSpace!\33[m" (util/colorize "Space!" :black)))
-  (is (= "\33[1;37;40mSpace!\33[m"
+  (is (= "\33[1;37mSpace!\33[m" (util/colorize "Space!")))
+  (is (= "\33[0;30mSpace!\33[m" (util/colorize "Space!" :black)))
+  (is (= "\33[1;37mSpace!\33[m"
          (util/colorize "Space!" :white :background :black)))
-  (is (= "\33[1;37;40mSpace!\33[m"
+  (is (= "\33[1;37mSpace!\33[m"
          (util/colorize "Space!" :white :background :black :type :light))))
 
