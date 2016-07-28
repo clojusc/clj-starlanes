@@ -25,8 +25,7 @@
                           :bank {"Alice" {:cash 0.0}}}]
       (is (= 0.0 (finance/get-player-cash "Alice" fake-game-data))))
     (let [fake-game-data {}]
-      (is (= 0 (finance/get-player-cash "Alice" fake-game-data))))
-    ))
+      (is (= 0 (finance/get-player-cash "Alice" fake-game-data))))))
 
 (deftest test-player-add-cash
   (is (= 60
