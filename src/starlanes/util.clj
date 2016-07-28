@@ -289,3 +289,8 @@
        text
        const/end-color))))
 
+(defn starts-with?
+  "True if s starts with substr."
+  {:added "1.8"}
+  [^CharSequence s ^String substr]
+  (.startsWith (.toString s) substr))
