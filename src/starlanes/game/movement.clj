@@ -56,12 +56,10 @@
       (game-map/next-to-company? keyword-coord game-data)
         (cond
           (> company-count 1)
-            (company/merge-companies
-              keyword-coord (get-current-player game-data) companies game-data)
+            (company/merge-companies keyword-coord companies game-data)
           :else
             (company/expand-company
-              keyword-coord (get-current-player game-data) (first companies)
-              game-data))
+              keyword-coord (first companies) game-data))
       ; is the move next to a star?
       (game-map/next-to-star? keyword-coord game-data)
         (company/create-star-company

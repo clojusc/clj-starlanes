@@ -304,11 +304,10 @@
 (defn -merge-companies
   "Merge the companies, given the following data:
     * the keyword coordinate for the current move (e.g., :e1)
-    * data for the current player (e.g., {:name \"Carol\"})
     * coordinate data for the companies under question (e.g.,
       [[:d1 \"A\"] [:b1 \"B\"]])
     * game state"
-  [keyword-coord current-player companies-coords game-data]
+  [keyword-coord companies-coords game-data]
   (let [distinct-companies (distinct (map second companies-coords))
         winner (get-greatest-company distinct-companies game-data)
         losers (get-losers winner distinct-companies)]
@@ -320,14 +319,14 @@
          (set-new-owners losers winner))))
 
 (defn merge-companies
-  [keyword-coord current-player companies-coords game-data]
+  [keyword-coord companies-coords game-data]
   (util/display "\nMerging companies ...\n")
   (util/input const/continue-prompt)
-  (-merge-companies keyword-coord current-player companies-coords game-data))
+  (-merge-companies keyword-coord companies-coords game-data))
 
 (defn expand-company
   ""
-  [keyword-coord current-player company-item-data game-data]
+  [keyword-coord company-item-data game-data]
   (let [company-letter (second company-item-data)
         outpost-coords (map first (game-map/get-neighbor-outposts
                                     keyword-coord game-data))]

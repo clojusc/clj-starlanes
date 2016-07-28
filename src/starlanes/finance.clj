@@ -71,10 +71,10 @@
   (util/input const/continue-prompt)
   nil)
 
-(defn -display-players-earnings [game-data]
+(defn -display-players-earnings [];[game-data]
   nil)
 
-(defn display-players-earnings [game-data]
+(defn display-players-earnings [];[game-data]
   nil)
 
 (defn display-endgame-stats [game-data]
@@ -118,12 +118,13 @@
                                 game-data))))]
       (affordable? company-letter cash player-name game-data)))
   ([company-letter cash player-name game-data]
-   (let [share-value (finance-company/get-share-value company-letter game-data)]
-     (cond
-       (<= share-value cash) true
-       :else false))))
+   (let [share-value (finance-company/get-share-value company-letter game-data)
+         _do_something_with_player_name player-name]
+     (if (<= share-value cash)
+       true
+       false))))
 
-(defn display-stock-purchase-option [company-letter game-data]
+(defn display-stock-purchase-option [game-data];[company-letter game-data]
   (util/clear-screen)
   (util/display (str "Stock Exchange\n\n"))
   ; display prompt with current cash and finance-company/share info
@@ -136,7 +137,7 @@
 (defn display-stock-purchase-options
   ([game-data]
     (display-stock-purchase-options
-      (util/get-companies-letters game-data)
+      ;;(util/get-companies-letters game-data)
       game-data))
   ([companies-letters game-data]
     (let [company-letter (first companies-letters)
@@ -145,12 +146,15 @@
         (not (nil? company-letter))
           (display-stock-purchase-options
             remaining
-            (display-stock-purchase-option company-letter game-data))
+            (display-stock-purchase-option
+              ;company-letter
+              game-data))
         :else game-data))))
 
 (defn let-player-purchase-stocks [game-data]
   (let [player-name (game-move/get-current-player game-data)
-        shares-data (finance-company/get-share-values game-data)]
+        ;; shares-data (finance-company/get-share-values game-data)
+        ]
   (cond
     (affordable? player-name game-data)
       (display-stock-purchase-options game-data)

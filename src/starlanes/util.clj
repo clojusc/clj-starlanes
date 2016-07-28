@@ -263,7 +263,7 @@
 
 (defn get-color-tuple
   ""
-  [foreground-color background-color type]
+  [foreground-color type]
   (str
     (const/color-info type)
     ";"
@@ -278,21 +278,20 @@
 
 (defn start-color
   ""
-  [foreground-color background-color type]
+  [foreground-color type]
   (str
     const/open-color
-    (get-color-tuple foreground-color background-color type)
+    (get-color-tuple foreground-color type)
     const/close-color))
 
 (defn colorize
   ""
   ([text]
    (colorize text :white))
-  ([text foreground & {:keys [background] :or {background :black}}]
-   (let [[foreground-color type] (const/color-map foreground)
-         [background-color _] (const/color-map background)]
+  ([text foreground]
+   (let [[foreground-color type] (const/color-map foreground)]
      (str
-       (start-color foreground-color background-color type)
+       (start-color foreground-color type)
        text
        const/end-color))))
 

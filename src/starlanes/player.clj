@@ -15,8 +15,8 @@
 ; XXX implement a validator for player count; an error shouldn't be thrown
 ; when a user doesn't enter an integer. With bad input, retry. Also,
 ; this should check for maximum number of players, too.
-(defn validate-player-count [input]
-  )
+; (defn validate-player-count [input]
+;   )
 
 (defn get-new-players
   ([]

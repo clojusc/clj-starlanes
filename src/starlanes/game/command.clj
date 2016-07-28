@@ -61,8 +61,8 @@
   (util/input const/continue-prompt)
   nil)
 
-(defn display-score [game-data]
-  nil)
+(defn display-score [];[game-data]
+  "put <game score here>")
 
 (defn display-commands-no-prompt []
   (util/display \newline)

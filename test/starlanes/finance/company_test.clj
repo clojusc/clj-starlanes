@@ -187,7 +187,6 @@
     (is (= "A" (star-map :e2))))
   (let [game-data (company/-merge-companies
                     :a4
-                    {:name "Alice"}
                     [[:a3 "B"] [:b3 "B"] [:a5 "C"]]
                     util/fake-game-data)
         star-map (game-data :star-map)]
