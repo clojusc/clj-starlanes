@@ -101,16 +101,17 @@
   "Given a coordinate in keyword-form, return the x and y components as a
    vector."
   [keyword-coord]
-  (let [string-name (name keyword-coord)
-        [x-coord y-coord] (string->xy string-name)]
-    [x-coord y-coord]))
+  (-> keyword-coord
+      (name)
+      (string->xy)))
 
 (defn xy->keyword
   "Given a sequence of two items, each representing an x and y value for a
   coordinate, convert to a keyword."
   [xy-pair]
-  (keyword
-    (string/join xy-pair)))
+  (-> xy-pair
+      (string/join)
+      (keyword)))
 
 (defn move->string-coord
   "Give a player move (a string of the form 'yx'), convert it to a string
@@ -124,28 +125,30 @@
   "Given a player move coordinate (a string of the form 'yx') convert to a
   keyword coordinate (of the form :xy)."
   [move]
-  (let [xy-coords (string->xy (move->string-coord move))]
-    (xy->keyword xy-coords)))
+  (-> move
+      (move->string-coord)
+      (string->xy)
+      (xy->keyword)))
 
 (defn get-friendly-coord
   "Given a coord (a keyword such as :a23), return a format that is easier for
   a player to read (by row, then columns)."
   [keyword-coord]
-  (let [[x-coord y-coord] (keyword->xy keyword-coord)]
-    (string/join [y-coord x-coord])))
+  (-> keyword-coord
+      (keyword->xy)
+      (reverse)
+      (string/join)))
 
 (defn is-item? [coord-data expeted-item-char]
-  (cond
-    (= (last coord-data) expeted-item-char) true
-    :else false))
+  (= (last coord-data) expeted-item-char))
 
 (defn filter-item
   "This function is intended to be used as a parameter passed to a map
   function."
   [coord-data expeted-item-char]
-  (cond
-    (is-item? coord-data expeted-item-char) coord-data
-    :else nil))
+  (if (is-item? coord-data expeted-item-char)
+    coord-data
+    nil))
 
 (def filter-star #(filter-item % (const/items :star)))
 (def filter-empty #(filter-item % (const/items :empty)))
@@ -244,19 +247,13 @@
     (into {} (map (fn [x] [x second-map]) map-keys))))
 
 (defn company? [item]
-  (cond
-    (in? (get-companies-letters) item) true
-    :else false))
+  (in? (get-companies-letters) item))
 
 (defn star? [item]
-  (cond
-    (= item (const/items :star)) true
-    :else false))
+  (= item (const/items :star)))
 
 (defn outpost? [item]
-  (cond
-    (= item (const/items :outpost)) true
-    :else false))
+  (= item (const/items :outpost)))
 
 (defn get-color-tuple
   ""
