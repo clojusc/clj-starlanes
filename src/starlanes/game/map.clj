@@ -27,12 +27,10 @@
       [(keyword (str x y)) item])))
 
 (defn create-star-map [game-data]
-  (let [star-map-data (-create-star-map game-data)]
-    (into
-      (sorted-map)
-      (map
-        -combine-coords
-        star-map-data))))
+  (->> game-data
+       (-create-star-map)
+       (map -combine-coords)
+       (into (sorted-map))))
 
 (defn update-coords
   "Return a new game-data data structure with a new item at the given
@@ -60,37 +58,34 @@
     (first coord-data)))
 
 (defn get-open-coords [game-data]
-  (remove
-    nil?
-    (map
-      get-empty-coord
-      (game-data :star-map))))
+  (->> game-data
+       :star-map
+       (map get-empty-coord)
+       (remove nil?)))
 
 (defn get-item [keyword-coord game-data]
   ((game-data :star-map) keyword-coord))
 
 (defn get-item-coords [item-char game-data]
-  (remove
-    nil?
-    (map
-      #(first (util/filter-item % item-char))
-      (game-data :star-map))))
+  (->> game-data
+       :star-map
+       (map #(first (util/filter-item % item-char)))
+       (remove nil?)))
 
 (defn company-data? [coord-data]
   (util/in? (util/get-companies-letters) (second coord-data)))
 
 (defn get-companies-data [game-data]
-  (sort
-    (filter
-      company-data?
-      (game-data :star-map))))
+  (->> game-data
+       :star-map
+       (filter company-data?)
+       (sort)))
 
 (defn get-company-coords [game-data]
-  (sort
-    (flatten
-      (map
-        (fn [x] (get-item-coords x game-data))
-        (util/get-companies-letters)))))
+  (->> (util/get-companies-letters)
+       (map #(get-item-coords % game-data))
+       (flatten)
+       (sort)))
 
 (defn get-star-coords [game-data]
   (get-item-coords (const/items :star) game-data))
@@ -105,20 +100,20 @@
   "This function takes a letter representing the x component of a coordinate
   pair and returns the legal neighbors."
   [x-coord]
-  (filter
-    util/x-coord?
-    (map
-      util/chr
-      (get-possible-neighbors
-        (util/ord x-coord)))))
+  (->> x-coord
+       (util/ord)
+       (get-possible-neighbors)
+       (map util/chr)
+       (filter util/x-coord?)))
 
 (defn get-possible-y-neighbors
   "This function takes a number representing the y component of a coordinate
   pair and returns the legal neighbors."
   [y-coord]
-  (filter
-    util/y-coord?
-    (get-possible-neighbors (Integer. y-coord))))
+  (->> y-coord
+       (Integer.)
+       (get-possible-neighbors)
+       (filter util/y-coord?)))
 
 (defn get-neighbors-pairs
   "This function takes a keyword that represents a coordinate (e.g., :b23) and
@@ -130,9 +125,10 @@
   [keyword-coord]
   (let [[x-coord y-coord] (util/keyword->xy keyword-coord)
         x-neighbors (get-possible-x-neighbors x-coord)
-        y-neighbors (get-possible-y-neighbors y-coord)
-        pairs (combi/cartesian-product x-neighbors y-neighbors)]
-    (remove #{[x-coord (Integer. y-coord)]} pairs)))
+        y-neighbors (get-possible-y-neighbors y-coord)]
+    (->> y-neighbors
+         (combi/cartesian-product x-neighbors)
+         (remove #{[x-coord (Integer. y-coord)]}))))
 
 (defn get-neighbors
   "This function takes a keyword that represents a coordinate (e.g., :b23) and
@@ -142,32 +138,33 @@
   given coordinate is in the center of the map).
   "
   [keyword-coord]
-  (map
-    (comp keyword string/join)
-    (get-neighbors-pairs keyword-coord)))
+  (->> keyword-coord
+       (get-neighbors-pairs)
+       (map (comp keyword string/join))))
 
 (defn get-item-neighbors [keyword-coord game-data]
   (map (fn [x] [x (get-item x game-data)])
        (get-neighbors keyword-coord)))
 
 (defn get-neighbor-companies [keyword-coord game-data]
-  (filter
-    (comp util/company? second)
-    (get-item-neighbors keyword-coord game-data)))
+  (->> game-data
+       (get-item-neighbors keyword-coord)
+       (filter (comp util/company? second))))
 
 (defn get-neighbor-stars [keyword-coord game-data]
-  (filter
-    (comp util/star? second)
-    (get-item-neighbors keyword-coord game-data)))
+  (->> game-data
+       (get-item-neighbors keyword-coord)
+       (filter (comp util/star? second))))
 
 (defn get-neighbor-outposts [keyword-coord game-data]
-  (filter
-    (comp util/outpost? second)
-    (get-item-neighbors keyword-coord game-data)))
+  (->> game-data
+       (get-item-neighbors keyword-coord)
+       (filter (comp util/outpost? second))))
 
 (defn near-item? [keyword-coord coords-for-items]
-  (let [items-neighbors (flatten (map get-neighbors coords-for-items))]
-    (util/in? items-neighbors keyword-coord)))
+  (-> (map get-neighbors coords-for-items)
+      (flatten)
+      (util/in? keyword-coord)))
 
 (defn next-to-company? [keyword-coord game-data]
   (near-item? keyword-coord (get-company-coords game-data)))
