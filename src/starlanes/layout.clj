@@ -14,10 +14,11 @@
   (str row-grid-entry const/row-heading-init))
 
 (defn get-row-header-buffer []
-  (count
-    (get-row-header
-        (first
-            (take-last 1 const/ygrid)))))
+  (->> const/ygrid
+       (take-last 1)
+       (first)
+       (get-row-header)
+       (count)))
 
 (defn print-grid-title [buffer-width grid-width]
   (let [mid-point (/ grid-width 2)
@@ -54,22 +55,24 @@
     :else ((set/map-invert const/items) item)))
 
 (defn colorize-item [item]
-  (let [color (const/item-colors (get-item-name item))]
-    (util/colorize item color)))
+  (->> item
+       (get-item-name)
+       (const/item-colors)
+       (util/colorize item)))
 
 (defn get-row-string [row-data]
   "'row-data' contains a list of keys (keywords) and values. To get the string
   content for the row, the values need to be extracted.
   "
-  (string/join
-    grid-space
-    (map
-      (comp colorize-item second)
-      row-data)))
+  (->> row-data
+       (map (comp colorize-item second))
+       (string/join grid-space)))
 
 (defn get-row [row-key grouped-star-map]
-  (let [row-data (sort (get grouped-star-map row-key))]
-    (get-row-string row-data)))
+  (-> grouped-star-map
+      (get row-key)
+      (sort)
+      (get-row-string)))
 
 (defn keyword-grouper
   "This function expects a list whose first element is a keyword (which will be
@@ -79,10 +82,11 @@
   of lists, where the sub-lists are pairs of keywords and single-character
   string values."
   [item]
-  (str
-    (first
-      (name
-        (first item)))))
+  (-> item
+      (first)
+      (name)
+      (first)
+      (str)))
 
 (defn grouper
   "This function expects a list whose first element is a keyword, and whose
@@ -97,10 +101,11 @@
   of lists, where the sub-lists are pairs of keywords and single-character
   string values."
   [item]
-  (string/join
-    (drop 1
-      (name
-        (first item)))))
+  (->> item
+        (first)
+        (name)
+        (drop 1)
+        (string/join)))
 
 (defn print-rows [game-data]
   (let [star-map (group-by grouper (game-data :star-map))]
