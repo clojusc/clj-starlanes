@@ -54,23 +54,12 @@ test-only:
 	@lein all test
 
 coverage-only:
-	-@lein with-profile testing cloverage --text --html
+	-@lein cloverage --text --html
 	@cat target/coverage/coverage.txt
 	@echo "body {background-color: #000; color: #fff;} \
 	a {color: #A5C0F0;}" >> target/coverage/coverage.css
 
-check-versions:
-	@echo "Version Info"
-	@echo "------------"
-	@echo
-	@echo "Makefile:"
-	@echo "\t$(VERSION)"
-	@echo "project.clj:"
-	@lein exec -e '(println (str "\t" (last (clojure.string/split (first (clojure.string/split-lines (slurp "project.clj"))) #"\s+"))))'|sed -e 's/"//g'
-	@echo "$(PROJECT).version:"
-	@lein exec -ep "(require '[$(PROJECT).version]) (print (str \"\t\" $(PROJECT).version/version-str))"
-
-check: kibit-only test-only coverage-only check-versions
+check: kibit-only test-only coverage-only
 
 upload:
 	@lein deploy clojars
