@@ -1,7 +1,6 @@
 (ns starlanes.game.command
   (:require [clojure.string :as string]
             [starlanes.const :as const]
-            [starlanes.finance :as finance]
             [starlanes.game.movement :as game-move]
             [starlanes.instructions :as instructions]
             [starlanes.player :as player]

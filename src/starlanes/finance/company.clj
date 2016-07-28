@@ -3,7 +3,6 @@
             [starlanes.const :as const]
             [starlanes.game.map :as game-map]
             [starlanes.finance.stock :as stock]
-            [starlanes.player :as player]
             [starlanes.util :as util]))
 
 

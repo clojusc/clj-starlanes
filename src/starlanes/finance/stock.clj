@@ -1,6 +1,5 @@
 (ns starlanes.finance.stock
-  (:require [starlanes.const :as const]
-            [starlanes.player :as player]
+  (:require [starlanes.player :as player]
             [starlanes.util :as util]))
 
 

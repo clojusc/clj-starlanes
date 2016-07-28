@@ -1,11 +1,8 @@
 (ns starlanes.finance
-  (:require [clojure.set :as sets]
-            [starlanes.const :as const]
-            [starlanes.game.map :as game-map]
+  (:require [starlanes.const :as const]
             [starlanes.game.movement :as game-move]
             [starlanes.finance.stock :as finance-stock]
             [starlanes.finance.company :as finance-company]
-            [starlanes.player :as player]
             [starlanes.util :as util]))
 
 

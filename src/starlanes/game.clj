@@ -2,7 +2,6 @@
   (:require [clojure.string :as string]
             [starlanes.const :as const]
             [starlanes.finance :as finance]
-            [starlanes.finance.company :as company]
             [starlanes.finance.stock :as stock]
             [starlanes.game.map :as game-map]
             [starlanes.game.movement :as game-move]
