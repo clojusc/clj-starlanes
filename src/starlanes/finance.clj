@@ -128,7 +128,7 @@
 
 (defn display-stock-purchase-option [company-letter game-data]
   (util/clear-screen)
-  (util/display (str "Stock Exchange" \newline \newline))
+  (util/display (str "Stock Exchange\n\n"))
   ; display prompt with current cash and finance-company/share info
   ; check to see if there are enough funds
   ; ensure aount is positive
