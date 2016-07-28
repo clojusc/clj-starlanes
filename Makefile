@@ -48,7 +48,7 @@ run-jar-standalone: build
 	java -jar $(STANDALONE_JAR)
 
 kibit-only:
-	-@lein kibit
+	-@lein kibit && echo "Source code gets +1 from kibit ..."
 
 test-only:
 	@lein all test
@@ -58,6 +58,16 @@ coverage-only:
 	@cat target/coverage/coverage.txt
 	@echo "body {background-color: #000; color: #fff;} \
 	a {color: #A5C0F0;}" >> target/coverage/coverage.css
+
+lint: kibit-only
+	@lein eastwood "{:namespaces [:source-paths]}" && \
+	echo "Source code gets +1 from kibit ..."
+
+lint-unused:
+	@lein eastwood "{:linters [:unused-fn-args :unused-locals :unused-namespaces :unused-private-vars :wrong-ns-form] :namespaces [:source-paths]}"
+
+lint-ns:
+	@lein eastwood "{:linters [:unused-namespaces :wrong-ns-form] :namespaces [:source-paths]}"
 
 check: kibit-only test-only coverage-only
 
