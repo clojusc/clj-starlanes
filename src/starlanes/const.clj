@@ -49,9 +49,9 @@
 (def win-by-turns? false)
 (def max-turns 2)
 (def seed 314)
-; mex-moves-choices is the maximum allowed number of randomly-generated moves
-; that will be offered to the player as options during a turn. By default,
-; users are presented with 5 choices from which they can select their move.
+;; max-moves-choices is the maximum allowed number of randomly-generated moves
+;; that will be offered to the player as options during a turn. By default,
+;; users are presented with 5 choices from which they can select their move.
 (def max-moves-choices 5)
 (def star-rate 0.05)
 
