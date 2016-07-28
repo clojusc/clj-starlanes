@@ -12,8 +12,8 @@
             :url "http://opensource.org/licenses/BSD-3-Clause"}
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/math.combinatorics "0.1.3"]]
-  :plugins [[lein-exec "0.3.6"]
-            [lein-kibit "0.1.2"]]
+  :plugins [[lein-kibit "0.1.2"]
+            [lein-cloverage "1.0.6"]]
   :aot [starlanes.trader]
   :main starlanes.trader
   :repl-options {
