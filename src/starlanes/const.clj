@@ -72,7 +72,8 @@
 (def share-modifier-star 500)
 (def share-modifier-base 100)
 (def founding-shares 5)
-(def dividend-percentage (/ 5 100))
+(def dividend-percentage 0.1)
+(def dividend-multiplier (/ dividend-percentage 100))
 (def max-stock-value 3000)
 (def currency-name "credit")
 

@@ -3,8 +3,8 @@
             [starlanes.const :as const]
             [starlanes.game.map :as game-map]
             [starlanes.game.movement :as game-move]
-            [starlanes.finance.stock :as stock]
-            [starlanes.finance.company :as company]
+            [starlanes.finance.stock :as finance-stock]
+            [starlanes.finance.company :as finance-company]
             [starlanes.player :as player]
             [starlanes.util :as util]))
 
@@ -34,9 +34,9 @@
 
 (defn -display-companies-values [game-data]
   (util/display
-    (str \newline "Company valuations:" \newline \newline))
+    (str \newline "Company valuations:\n\n"))
   (let [companies-letters (util/get-companies-letters game-data)
-        values (company/get-companies-values companies-letters game-data)]
+        values (finance-company/get-companies-values companies-letters game-data)]
     (doseq [[company-keyword total-value] values]
       (let [company-name (util/get-company-name company-keyword)]
         (util/display
@@ -55,11 +55,11 @@
   (util/display
     (str "Here is your balance for cash-on-hand:" \newline \newline
          \tab (get-player-cash player-name game-data) \newline))
-  (let [shares (stock/get-named-shares player-name game-data)]
+  (let [shares (finance-stock/get-named-shares player-name game-data)]
     (util/display
       (str \newline "Here are your current earnings: " \newline \newline))
     (doseq [[company-name share] shares]
-      (let [share-price (company/get-share-value
+      (let [share-price (finance-company/get-share-value
                           (str (first company-name)) game-data)
             value (* share share-price)]
         (display-company-data company-name share share-price value)))
@@ -92,12 +92,12 @@
   nil)
 
 (defn get-dividends [player-name game-data]
-  (let [shares (stock/get-player-shares-with-companies player-name game-data)
-        values (company/get-share-values game-data)]
-    (* const/dividend-percentage
+  (let [shares (finance-stock/get-player-shares-with-companies player-name game-data)
+        values (finance-company/get-share-values-with-company game-data)]
+    (* const/dividend-multiplier
        (reduce +
                (map
-                 #(* (second %1) %2)
+                 #(* (second %1) (first %2))
                  shares
                  values)))))
 
@@ -117,11 +117,11 @@
    (let [company-letter (second
                           (first
                             (sort
-                              (company/get-share-values-with-company
+                              (finance-company/get-share-values-with-company
                                 game-data))))]
       (affordable? company-letter cash player-name game-data)))
   ([company-letter cash player-name game-data]
-   (let [share-value (company/get-share-value company-letter game-data)]
+   (let [share-value (finance-company/get-share-value company-letter game-data)]
      (cond
        (<= share-value cash) true
        :else false))))
@@ -129,7 +129,7 @@
 (defn display-stock-purchase-option [company-letter game-data]
   (util/clear-screen)
   (util/display (str "Stock Exchange" \newline \newline))
-  ; display prompt with current cash and company/share info
+  ; display prompt with current cash and finance-company/share info
   ; check to see if there are enough funds
   ; ensure aount is positive
   ; make purchase - update stock exchange, update bank
@@ -153,7 +153,7 @@
 
 (defn let-player-purchase-stocks [game-data]
   (let [player-name (game-move/get-current-player game-data)
-        shares-data (company/get-share-values game-data)]
+        shares-data (finance-company/get-share-values game-data)]
   (cond
     (affordable? player-name game-data)
       (display-stock-purchase-options game-data)
