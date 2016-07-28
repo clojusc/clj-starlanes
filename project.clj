@@ -17,8 +17,7 @@
   :aot [starlanes.trader]
   :main starlanes.trader
   :repl-options {
-    :welcome ~(println (get-banner))
-  }
+    :welcome ~(println (get-banner))}
   :test-selectors {:default (complement :integration)
                    :integration :integration
                    :all (constantly true)}
@@ -36,7 +35,5 @@
       :dependencies [[org.clojure/clojure "1.8.0"]]
       :source-paths ["dev-resources/src"]
       :repl-options {
-        :init-ns starlanes.debug
-      }
-      }}
+        :init-ns starlanes.debug}}}
   :aliases {"all" ["with-profile" "1.5:1.6:1.7:1.8"]})
