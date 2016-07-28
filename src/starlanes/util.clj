@@ -258,7 +258,6 @@
 (defn get-color-tuple
   ""
   [foreground-color background-color type]
-  (println background-color)
   (str
     (const/color-info type)
     ";"
