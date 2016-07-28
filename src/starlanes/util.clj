@@ -1,7 +1,8 @@
 (ns starlanes.util
   (:require [clojure.string :as string]
             [clojure.set :refer [intersection]]
-            [starlanes.const :as const]))
+            [starlanes.const :as const])
+  (:refer-clojure :exclude [or]))
 
 
 (def fake-star-map
@@ -146,9 +147,8 @@
   "This function is intended to be used as a parameter passed to a map
   function."
   [coord-data expeted-item-char]
-  (if (is-item? coord-data expeted-item-char)
-    coord-data
-    nil))
+  (when (is-item? coord-data expeted-item-char)
+    coord-data))
 
 (def filter-star #(filter-item % (const/items :star)))
 (def filter-empty #(filter-item % (const/items :empty)))
@@ -169,6 +169,12 @@
     const/ygrid-start
     const/ygrid-end))
 
+(defn or
+  "A binary function wrapper for the `or` macro so that it can be used as a
+  reducer."
+  [a b]
+  (clojure.core/or a b))
+
 (defn in?
   "Given a sequence and a potential element of that sequence, determine if it
   is, in fact, part of that sequence."
@@ -177,7 +183,7 @@
     false
     (->> sequence
          (map #(= %1 item))
-         (reduce #(or %1 %2)))))
+         (reduce or))))
 
 (defn x-coord? [x-coord]
   (in? (get-x-coord-range) x-coord))
@@ -294,4 +300,4 @@
   "True if s starts with substr."
   {:added "1.8"}
   [^CharSequence s ^String substr]
-  (.startsWith (.toString s) substr))
+  (.startsWith (str s) substr))
