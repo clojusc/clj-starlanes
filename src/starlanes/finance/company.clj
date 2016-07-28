@@ -20,10 +20,10 @@
 (defn get-names
   "Extract the total company names from the game data."
   [game-data]
-  (->> util/fake-game-data
+  (->> game-data
        :companies-queue
        (map (fn [x] {:name x}))
-       (into (:companies util/fake-game-data))))
+       (into (:companies game-data))))
 
 (defn match-name-letter
   "Given a letter and a company name, this function will take the first letter
