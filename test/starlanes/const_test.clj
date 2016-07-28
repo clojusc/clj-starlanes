@@ -16,3 +16,9 @@
 (deftest test-make-y-coord
   (is (= (const/make-y-coord 1) "1"))
   (is (= (const/make-y-coord 10) "10")))
+
+(deftest test-grid-coord-values
+  (is (= const/xgrid-start 97))
+  (is (= const/xgrid-end 102))
+  (is (= const/ygrid-start 1))
+  (is (= const/ygrid-end 6)))

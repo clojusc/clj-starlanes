@@ -50,9 +50,9 @@
                      \newline)))
 
 (defn get-item-name [item]
-  (cond
-    (util/company? item) :company
-    :else ((set/map-invert const/items) item)))
+  (if (util/company? item)
+    :company
+    ((set/map-invert const/items) item)))
 
 (defn colorize-item [item]
   (->> item
@@ -62,8 +62,7 @@
 
 (defn get-row-string [row-data]
   "'row-data' contains a list of keys (keywords) and values. To get the string
-  content for the row, the values need to be extracted.
-  "
+  content for the row, the values need to be extracted."
   (->> row-data
        (map (comp colorize-item second))
        (string/join grid-space)))

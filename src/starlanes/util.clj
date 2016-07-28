@@ -258,14 +258,18 @@
 (defn get-color-tuple
   ""
   [foreground-color background-color type]
+  (println background-color)
   (str
     (const/color-info type)
     ";"
     (const/color-info :foreground)
     (const/color-info foreground-color)
-    ";"
-    (const/color-info :background)
-    (const/color-info background-color)))
+    ;; :black or 0 is actually dark grey for backgrounds ... to get black,
+    ;; don't specify a background color
+    ;; ";"
+    ;; (const/color-info :background)
+    ;; (const/color-info background-color)
+    ))
 
 (defn start-color
   ""
@@ -280,9 +284,10 @@
   ([text]
    (colorize text :white))
   ([text foreground & {:keys [background] :or {background :black}}]
-   (let [[foreground-color type] (const/color-map foreground)]
+   (let [[foreground-color type] (const/color-map foreground)
+         [background-color _] (const/color-map background)]
      (str
-       (start-color foreground-color background type)
+       (start-color foreground-color background-color type)
        text
        const/end-color))))
 

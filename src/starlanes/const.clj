@@ -4,6 +4,21 @@
 
 (def game-title "Star Traders")
 
+(def companies ["Altair Starways"
+                "Betelgeuse, Ltd."
+                "Capella Cargo Co."
+                "Denebola Shippers"
+                "Eridani Expediters"
+                "Fomalhaut Freighters"
+                "Gamma Corvi Cartel"
+                "Horologii Holdings"
+                "Innes Industries"
+                "Jabbah Journeyers"
+                "Kapteyn's Outfitters"
+                "Luyten, Ltd."])
+
+(def max-companies 5)
+
 (def items {:star "*"
             :empty "."
             :outpost "+"})
@@ -16,16 +31,20 @@
 (def outpost-char "+")
 (def grid-spaces 3)
 
-(def xgrid-start (int (.charAt "a" 0)))
-(def xgrid-end (inc (int (.charAt "e" 0))))
+(def xgrid-start-name "a")
+(def xgrid-end-name "e")
+(def xgrid-start (int (.charAt xgrid-start-name 0)))
+(def xgrid-end (inc (int (.charAt xgrid-end-name 0))))
 (def xgrid-size (- xgrid-end xgrid-start))
 (def xgrid
   (map
     (comp str char)
     (range xgrid-start xgrid-end)))
 
-(def ygrid-start 1)
-(def ygrid-end 5)
+(def ygrid-start-name "1")
+(def ygrid-end-name "5")
+(def ygrid-start (Integer. ygrid-start-name))
+(def ygrid-end (Integer. ygrid-end-name))
 (def ygrid-pad (count (str ygrid-end)))
 
 (defn make-y-coord [y]
@@ -54,21 +73,6 @@
 ;; users are presented with 5 choices from which they can select their move.
 (def max-moves-choices 5)
 (def star-rate 0.05)
-
-(def companies ["Altair Starways"
-                "Betelgeuse, Ltd."
-                "Capella Cargo Co."
-                "Denebola Shippers"
-                "Eridani Expediters"
-                "Fomalhaut Freighters"
-                "Gamma Corvi Cartel"
-                "Horologii Holdings"
-                "Innes Industries"
-                "Jabbah Journeyers"
-                "Kapteyn's Outfitters"
-                "Luyten, Ltd."])
-
-(def max-companies 5)
 (def share-modifier-star 500)
 (def share-modifier-base 100)
 (def founding-shares 5)
