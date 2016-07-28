@@ -31,6 +31,10 @@
 (def outpost-char "+")
 (def grid-spaces 3)
 
+;; XXX it might make sense to move this into the layout namespace as part of
+;;     the work for ticket #36:
+;;       https://github.com/clojusc/clj-starlanes/issues/36
+
 (def xgrid-start-name "a")
 (def xgrid-end-name "e")
 (def xgrid-start (int (.charAt xgrid-start-name 0)))
@@ -44,13 +48,13 @@
 (def ygrid-start-name "1")
 (def ygrid-end-name "5")
 (def ygrid-start (Integer. ygrid-start-name))
-(def ygrid-end (Integer. ygrid-end-name))
-(def ygrid-pad (count (str ygrid-end)))
+(def ygrid-end-prime (Integer. ygrid-end-name))
+(def ygrid-pad (count (str ygrid-end-prime)))
 
 (defn make-y-coord [y]
   (format (str "%0" ygrid-pad "d") (Integer. y)))
 
-(def ygrid-end (+ ygrid-start ygrid-end))
+(def ygrid-end (+ ygrid-start ygrid-end-prime))
 
 (def ygrid
   (map str (range ygrid-start ygrid-end)))
