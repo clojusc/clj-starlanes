@@ -18,6 +18,38 @@
       (company-factory)
       :name name)))
 
+(defn get-names
+  "Extract the total company names from the game data."
+  [game-data]
+  (->> util/fake-game-data
+       :companies-queue
+       (map (fn [x] {:name x}))
+       (into (:companies util/fake-game-data))))
+
+(defn match-name-letter
+  "Given a letter and a company name, this function will take the first letter
+  of the company name and check that it matches the given letter. Success
+  returns the company name, failure returns an empty string."
+  [match-letter company-name]
+  (if (util/starts-with? company-name match-letter)
+      company-name))
+
+(defn company-data->name
+  ""
+  [letter company-data]
+  (->> company-data
+       :name
+       (match-name-letter letter)))
+
+(defn get-name
+  "Given a letter representing a company, find the corresponding company name."
+  [letter game-data]
+  (->> game-data
+       (get-names)
+       (map #(company-data->name letter %))
+       (filter string?)
+       (first)))
+
 (defn add-company [game-data]
   (let [available (game-data :companies-queue)
         company-name (first available)
@@ -34,21 +66,21 @@
       (not= (x :name) company-name))
     companies))
 
-(defn remove-company [company-name game-data]
-  (let [companies-queue (sort
+(defn remove-company [company-letter game-data]
+  (let [company-name (get-name company-letter game-data)
+        companies-queue (sort
                           (concat
                             (game-data :companies-queue) [company-name]))
         companies (filter-company company-name (game-data :companies))]
     (conj game-data {:companies companies :companies-queue companies-queue})))
 
-(defn remove-companies [companies-names game-data]
-  (let [company-name (first companies-names)
-        remaining (rest companies-names)]
+(defn remove-companies [companies-letters game-data]
+  (let [[company-letter & remaining] companies-letters]
     (cond
-      (not (nil? company-name))
+      (not (nil? company-letter))
         (remove-companies
           remaining
-          (remove-company company-name game-data))
+          (remove-company company-letter game-data))
       :else game-data)))
 
 (defn announce-new-company [company-name]
@@ -63,10 +95,10 @@
     (str
       \newline
       (current-player :name) ", you have been awarded "
-      const/founding-shares " share(s) in " \newline
-      company-name ", currently valued at " \newline
+      const/founding-shares " share(s) in \n"
+      company-name ", currently valued at \n"
       (* units mod) " "
-      const/currency-name "s each." \newline \newline))
+      const/currency-name "s each.\n\n"))
   (util/input const/continue-prompt))
 
 (defn make-announcements [current-player company-name units mod]
@@ -246,9 +278,10 @@
 (defn get-losers
   ""
   [winner all-companies]
-  (sets/difference
-    (set all-companies)
-    (set [(name winner)])))
+  (->> (set [(name winner)])
+       (sets/difference (set all-companies))
+       (into [])
+       (sort)))
 
 (defn set-new-owner
   ""
@@ -271,23 +304,21 @@
 
 (defn -merge-companies
   "Merge the companies, given the following data:
-
-     * the keyword coordinate for the current move (e.g., :e1)
-     * data for the current player (e.g., {:name \"Carol\"})
-     * coordinate data for the companies under question (e.g.,
+    * the keyword coordinate for the current move (e.g., :e1)
+    * data for the current player (e.g., {:name \"Carol\"})
+    * coordinate data for the companies under question (e.g.,
       [[:d1 \"A\"] [:b1 \"B\"]])
-     * game state
-  "
+    * game state"
   [keyword-coord current-player companies-coords game-data]
   (let [distinct-companies (distinct (map second companies-coords))
         winner (get-greatest-company distinct-companies game-data)
         losers (get-losers winner distinct-companies)]
-    ; XXX recalculate value of winning company, with map updated
-    ; XXX if the stock is over the threshold, perform a split
+    ;; XXX recalculate value of winning company, with map updated
+    ;; XXX if the stock is over the threshold, perform a split
     (->> game-data
-         (remove-companies
-           (map util/get-company-name losers))
-         (game-map/update-coords keyword-coord winner))))
+         (remove-companies losers)
+         (game-map/update-coords keyword-coord winner)
+         (set-new-owners losers winner))))
 
 (defn merge-companies
   [keyword-coord current-player companies-coords game-data]

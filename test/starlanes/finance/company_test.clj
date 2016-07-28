@@ -139,7 +139,7 @@
           (company/get-greatest-company ["D" "E"] util/fake-game-data))))))
 
 (deftest test-get-losers
-  (is (= #{"A" "B" "D"} (company/get-losers "C" ["A" "B" "C" "D"]))))
+  (is (= ["A" "B" "D"] (company/get-losers "C" ["A" "B" "C" "D"]))))
 
 (deftest test-set-new-owner
   (let [star-map (util/fake-game-data :star-map)]
