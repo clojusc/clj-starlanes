@@ -1,6 +1,6 @@
 # Clojure Star-Lanes
 
-*A Nostalgic Implementation*
+*A Nostalgic Reimplementation of the old Star Lanes BASIC Game*
 
 
 [![Build Status][travis-badge]][travis][![Dependencies Status][deps-badge]][deps][![Clojars Project][clojars-badge]][clojars]
