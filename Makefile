@@ -61,7 +61,7 @@ coverage-only:
 
 lint: kibit-only
 	@lein eastwood "{:namespaces [:source-paths]}" && \
-	echo "Source code gets +1 from kibit ..."
+	echo "Source code gets +1 from eastwood ..."
 
 lint-unused:
 	@lein eastwood "{:linters [:unused-fn-args :unused-locals :unused-namespaces :unused-private-vars :wrong-ns-form] :namespaces [:source-paths]}"
